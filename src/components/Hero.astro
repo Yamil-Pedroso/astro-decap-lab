@@ -1,0 +1,55 @@
+---
+import { Image } from "astro:assets";
+import assets from "../assets";
+---
+
+<section class="mt-6 overflow-hidden rounded-3xl bg-slate-950 text-white">
+  <div
+    class="grid min-h-130 items-center gap-10 px-8 py-12 lg:grid-cols-2 lg:px-14"
+  >
+    <div>
+      <p
+        class="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-violet-400"
+      >
+        Refurbished technology
+      </p>
+
+      <h1 class="max-w-xl text-5xl font-bold tracking-tight sm:text-6xl">
+        Technology deserves a second life.
+      </h1>
+
+      <p class="mt-6 max-w-xl text-lg leading-8 text-slate-300">
+        Discover reliable refurbished computers, components and accessories for
+        a smarter and more sustainable way to use technology.
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a
+          href="/products"
+          class="rounded-xl bg-violet-600 px-6 py-3 font-semibold transition hover:bg-violet-500"
+        >
+          Shop products
+        </a>
+
+        <a
+          href="/about"
+          class="rounded-xl border border-slate-700 px-6 py-3 font-semibold text-slate-200 transition hover:border-violet-400 hover:text-white"
+        >
+          Learn more
+        </a>
+      </div>
+    </div>
+
+    <div class="relative min-h-90 overflow-hidden lg:min-h-120">
+      <Image
+        src={assets.hero1}
+        alt="Refurbished laptop illuminated with purple light"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+      <div
+        class="pointer-events-none absolute inset-0 bg-linear-to-r from-slate-950 via-transparent to-transparent"
+      >
+      </div>
+    </div>
+  </div>
+</section>
