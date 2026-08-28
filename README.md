@@ -1,46 +1,68 @@
-# Astro Starter Kit: Basics
+# Reboot Lab
 
-```sh
-npm create astro@latest -- --template basics
-```
+![Reboot Lab preview](./src/assets/images/readme/reboot-lab-preview.png)
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+A modern refurbished technology storefront built with Astro and Tailwind CSS, created as a learning lab for exploring decoupled CMS architecture, Git-based content workflows and modern deployment practices.
 
-## 🚀 Project Structure
+Reboot Lab is a fictional shop focused on giving computers, components and electronics a second life.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Project goals
+
+This project is not only about building a storefront UI. It is also an architecture lab designed to explore how a modern static-first frontend can work with Git-managed content and progressively evolve toward a production-ready deployment workflow.
+
+The project is being built incrementally, with a strong focus on understanding each architectural decision rather than adding the entire stack at once.
+
+## Tech stack
+
+Current:
+
+- Astro
+- TypeScript
+- Tailwind CSS
+- Astro Assets
+- Git / GitHub
+
+Planned:
+
+- Astro Content Collections
+- Decap CMS
+- React Islands where client-side interactivity is actually needed
+- Docker
+- Docker Compose
+- CI/CD
+- Reverse proxy
+- VPS deployment
+- GitOps-oriented workflows
+
+## Current features
+
+- Shared Astro layout
+- Responsive site header
+- Editorial technology-focused hero section
+- Product categories
+- Dynamic category routes
+- Product filtering by category
+- Reusable product cards
+- Responsive footer
+- Optimized local images with Astro Assets
+
+## Project structure
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+src/
+├── assets/
+│   ├── images/
+│   └── index.ts
+├── components/
+├── data/
+│   ├── categories.ts
+│   └── products.ts
+├── layouts/
+├── pages/
+│   └── categories/
+│       └── [slug].astro
+├── styles/
+│   └── global.css
+└── types/
+    ├── category.ts
+    └── product.ts
