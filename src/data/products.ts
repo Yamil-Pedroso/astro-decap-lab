@@ -8,7 +8,7 @@ export const products: Product[] = [
     category: "laptops",
     price: 349,
     description: "Reliable refurbished business laptop.",
-    image: assets.imgEx,
+    image: assets.laptop1,
   },
   {
     name: "ThinkCentre M720q",
@@ -16,7 +16,7 @@ export const products: Product[] = [
     category: "desktops",
     price: 299,
     description: "Compact refurbished desktop for everyday work.",
-    image: assets.imgEx,
+    image: assets.desktop1,
   },
   {
     name: "Dell UltraSharp U2419H",
@@ -25,7 +25,7 @@ export const products: Product[] = [
     price: 129,
     description:
       "24-inch Full HD refurbished monitor with an IPS panel and versatile connectivity.",
-    image: assets.imgEx,
+    image: assets.monitor1,
   },
   {
     name: "Kingston DDR4 16GB",
@@ -34,6 +34,6 @@ export const products: Product[] = [
     price: 39,
     description:
       "Tested 16GB DDR4 memory module ready to extend the life of your computer.",
-    image: assets.imgEx,
+    image: assets.component1,
   },
 ];

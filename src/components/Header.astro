@@ -1,3 +1,11 @@
+---
+const pathname = Astro.url.pathname;
+const isShopActive =
+	pathname === "/" || pathname.startsWith("/products");
+const isCategoriesActive = pathname.startsWith("/categories");
+const isAboutActive = pathname.startsWith("/about");
+---
+
 <header class="border-b border-slate-200 bg-white">
 	<div
 	class="mx-auto flex w-full max-w-[1600px] items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
@@ -7,15 +15,36 @@
 		</a>
 
 		<nav class="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
-			<a href="/" class="transition hover:text-violet-600">
+			<a
+				href="/"
+				class:list={[
+					"transition hover:text-violet-600",
+					isShopActive && "text-violet-600",
+				]}
+				aria-current={isShopActive ? "page" : undefined}
+			>
 				Shop
 			</a>
 
-			<a href="/categories" class="transition hover:text-violet-600">
+			<a
+				href="/categories"
+				class:list={[
+					"transition hover:text-violet-600",
+					isCategoriesActive && "text-violet-600",
+				]}
+				aria-current={isCategoriesActive ? "page" : undefined}
+			>
 				Categories
 			</a>
 
-			<a href="/about" class="transition hover:text-violet-600">
+			<a
+				href="/about"
+				class:list={[
+					"transition hover:text-violet-600",
+					isAboutActive && "text-violet-600",
+				]}
+				aria-current={isAboutActive ? "page" : undefined}
+			>
 				About
 			</a>
 		</nav>

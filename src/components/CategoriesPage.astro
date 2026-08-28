@@ -1,0 +1,106 @@
+---
+import { Image } from "astro:assets";
+import assets from "../assets";
+import { categories } from "../data/categories";
+import { products } from "../data/products";
+
+const categoryImages = {
+  laptops: assets.laptop1,
+  desktops: assets.desktop1,
+  monitors: assets.monitor1,
+  components: assets.component1,
+};
+
+const categoryItems = categories.map((category) => ({
+  ...category,
+  image: categoryImages[category.slug as keyof typeof categoryImages],
+  itemCount: products.filter((product) => product.category === category.slug)
+    .length,
+}));
+---
+
+<section class="py-10 lg:py-16">
+  <div
+    class="grid overflow-hidden rounded-3xl bg-[#08080f] text-white lg:grid-cols-[1.2fr_0.8fr]"
+  >
+    <div class="p-8 sm:p-12 lg:p-16">
+      <p
+        class="text-xs font-semibold uppercase tracking-[0.22em] text-violet-400"
+      >
+        Browse the lab
+      </p>
+      <h1
+        class="mt-5 max-w-3xl text-5xl font-bold tracking-tight sm:text-6xl"
+      >
+        Hardware selected for another cycle.
+      </h1>
+      <p class="mt-6 max-w-2xl text-base leading-7 text-slate-300">
+        Explore tested refurbished technology organized by category. Every
+        product is selected to deliver reliable performance and extend the
+        useful life of existing hardware.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 border-t border-white/10 lg:border-l lg:border-t-0">
+      <div class="flex flex-col justify-end border-b border-r border-white/10 p-6">
+        <span class="text-4xl font-bold text-violet-400">
+          {categories.length}
+        </span>
+        <span class="mt-2 text-xs uppercase tracking-[0.18em] text-slate-400">
+          Categories
+        </span>
+      </div>
+      <div class="flex flex-col justify-end border-b border-white/10 p-6">
+        <span class="text-4xl font-bold text-violet-400">
+          {products.length}
+        </span>
+        <span class="mt-2 text-xs uppercase tracking-[0.18em] text-slate-400">
+          Products
+        </span>
+      </div>
+      <div class="col-span-2 flex items-center p-6">
+        <p class="text-sm leading-6 text-slate-400">
+          Laptops, desktops, monitors and reusable components ready to return
+          to work.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-10 grid gap-5 sm:grid-cols-2">
+    {
+      categoryItems.map((category, index) => (
+        <a
+          href={`/categories/${category.slug}`}
+          class="group relative min-h-80 overflow-hidden rounded-2xl bg-slate-950 text-white"
+        >
+          <Image
+            src={category.image}
+            alt={category.name}
+            class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+          />
+          <div class="absolute inset-0 bg-linear-to-t from-black via-black/35 to-transparent" />
+
+          <div class="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-7">
+            <div>
+              <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-violet-300">
+                {String(index + 1).padStart(2, "0")} / {category.itemCount}{" "}
+                {category.itemCount === 1 ? "item" : "items"}
+              </p>
+              <h2 class="mt-2 text-3xl font-bold tracking-tight">
+                {category.name}
+              </h2>
+              <p class="mt-2 max-w-md text-sm leading-6 text-slate-300">
+                {category.description}
+              </p>
+            </div>
+
+            <span class="flex size-11 shrink-0 items-center justify-center rounded-full bg-white text-lg text-slate-950 transition group-hover:bg-violet-600 group-hover:text-white">
+              →
+            </span>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</section>
