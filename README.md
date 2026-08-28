@@ -1,6 +1,6 @@
 # Reboot Lab
 
-![Reboot Lab preview](./src/assets/images/readme/reboot-lab-preview.png)
+![Reboot Lab preview](./src/assets/images/readme/reboot-lab-preview.webp)
 
 A modern refurbished technology storefront built with Astro and Tailwind CSS, created as a learning lab for exploring decoupled CMS architecture, Git-based content workflows and modern deployment practices.
 
