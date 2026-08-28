@@ -1,0 +1,24 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProductDetailCard from "../../components/ProductDetailCard.astro";
+import { products } from "../../data/products";
+
+export function getStaticPaths() {
+  return products.map((product) => ({
+    params: {
+      slug: product.slug,
+    },
+    props: {
+      product,
+    },
+  }));
+}
+
+const { product } = Astro.props;
+---
+
+<Layout title={`${product.name} | Reboot Lab`}>
+  <div class="py-10 lg:py-16">
+    <ProductDetailCard product={product} />
+  </div>
+</Layout>
