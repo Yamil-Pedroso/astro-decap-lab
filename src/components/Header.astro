@@ -1,4 +1,8 @@
 ---
+import { Image } from "astro:assets";
+import assets from "../assets";
+import CartDrawer from "./CartDrawer.astro";
+
 const pathname = Astro.url.pathname;
 const isShopActive =
 	pathname === "/" || pathname.startsWith("/products");
@@ -10,8 +14,12 @@ const isAboutActive = pathname.startsWith("/about");
 	<div
 	class="mx-auto flex w-full max-w-[1600px] items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
 >
-		<a href="/" class="text-xl font-bold tracking-tight text-slate-950">
-			Reboot Lab
+		<a href="/" aria-label="Reboot Lab home" class="shrink-0">
+			<Image
+				src={assets.brandLogo}
+				alt="Reboot Lab"
+				class="h-20 w-auto"
+			/>
 		</a>
 
 		<nav class="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
@@ -57,12 +65,23 @@ const isAboutActive = pathname.startsWith("/about");
 				Search
 			</button>
 
-			<a
-				href="/cart"
-				class="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-700"
+			<button
+				type="button"
+				data-cart-open
+				aria-controls="cart-drawer"
+				aria-haspopup="dialog"
+				class="relative rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-700"
 			>
 				Cart
-			</a>
+				<span
+					data-cart-count
+					class="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full border-2 border-white bg-slate-950 text-[9px] text-white"
+				>
+					0
+				</span>
+			</button>
 		</div>
 	</div>
 </header>
+
+<CartDrawer />
