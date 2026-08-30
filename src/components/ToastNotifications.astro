@@ -1,0 +1,76 @@
+<script>
+  import Notify from "simple-notify";
+  import "simple-notify/dist/simple-notify.css";
+
+  interface NotificationDetail {
+    type?: "success" | "info" | "error";
+    message: string;
+  }
+
+  window.addEventListener("reboot:notify", (event) => {
+    const { type = "info", message } = (event as CustomEvent<NotificationDetail>).detail;
+    const activeDialog = document.querySelector<HTMLDialogElement>("dialog[open]");
+
+    new Notify({
+      status: type,
+      text: message,
+      type: "filled",
+      effect: "slide",
+      position: "right top",
+      showIcon: true,
+      showCloseButton: true,
+      autoclose: true,
+      autotimeout: 2800,
+      customClass: "reboot-notification",
+      notificationsGap: 12,
+      notificationsPadding: 16,
+    });
+
+    const notificationContainer = document.querySelector<HTMLElement>(
+      ".sn-notifications-container",
+    );
+
+    if (notificationContainer) {
+      (activeDialog ?? document.body).append(notificationContainer);
+    }
+  });
+</script>
+
+<style is:global>
+  .sn-notifications-container {
+    --sn-success-color: #16a34a;
+    --sn-success-progress-color: #bbf7d0;
+    --sn-info-color: #7c3aed;
+    --sn-info-progress-color: #ddd6fe;
+    --sn-error-color: #dc2626;
+    --sn-error-progress-color: #fecaca;
+    --sn-notify-width: min(380px, calc(100vw - 2rem));
+    --sn-notify-radius: 0.75rem;
+    --sn-notify-padding: 1rem;
+    --sn-notify-progress-height: 3px;
+    z-index: 2147483647;
+  }
+
+  .sn-notifications-container .reboot-notification.sn-notify-filled,
+  .sn-notifications-container .reboot-notification.sn-notify-filled.sn-notify-success,
+  .sn-notifications-container .reboot-notification.sn-notify-filled.sn-notify-info,
+  .sn-notifications-container .reboot-notification.sn-notify-filled.sn-notify-error {
+    --sn-notify-background-color: #7c3aed;
+    --sn-notify-border-size: 1px;
+    --sn-notify-border-color: #8b5cf6;
+    --sn-notify-icon-color: white;
+    --sn-notify-progress-color: #c4b5fd;
+    box-shadow: 0 18px 45px rgb(15 23 42 / 0.22);
+  }
+
+  .reboot-notification .sn-notify-text {
+    margin-top: 0;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .reboot-notification .sn-notify-close {
+    color: white;
+  }
+</style>

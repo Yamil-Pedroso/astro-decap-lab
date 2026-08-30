@@ -1,7 +1,7 @@
 <dialog
   id="cart-drawer"
   aria-labelledby="cart-drawer-title"
-  class="fixed inset-y-0 right-0 m-0 ml-auto h-dvh max-h-none w-full max-w-md border-0 bg-transparent p-0 backdrop:bg-slate-950/60"
+  class="fixed inset-y-0 right-0 m-0 ml-auto h-dvh max-h-none w-full max-w-md border-0 bg-transparent p-0"
 >
   <div class="cart-panel flex h-full flex-col bg-white shadow-2xl">
     <div class="flex items-center justify-between border-b border-slate-200 px-6 py-5">
@@ -121,6 +121,8 @@
   const itemsContainer = cartDrawer?.querySelector<HTMLElement>("[data-cart-items]");
   const subtotalElement = cartDrawer?.querySelector<HTMLElement>("[data-cart-subtotal]");
   const checkoutButton = cartDrawer?.querySelector<HTMLButtonElement>("[data-cart-checkout]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let cartCloseTimer: number | undefined;
 
   const currency = new Intl.NumberFormat("de-CH", {
     style: "currency",
@@ -182,6 +184,14 @@
     removeButton.setAttribute("aria-label", `Remove ${item.name} from cart`);
     removeButton.addEventListener("click", () => {
       writeCart(readCart().filter((cartItem) => cartItem.slug !== item.slug));
+      window.dispatchEvent(
+        new CustomEvent("reboot:notify", {
+          detail: {
+            type: "info",
+            message: "Product removed from your cart.",
+          },
+        }),
+      );
     });
 
     controls.append(quantity, removeButton);
@@ -217,22 +227,68 @@
     }
   }
 
+  function openCart() {
+    if (!cartDrawer) return;
+
+    if (cartCloseTimer) {
+      window.clearTimeout(cartCloseTimer);
+      cartCloseTimer = undefined;
+    }
+
+    if (cartDrawer.open) {
+      cartDrawer.classList.add("is-visible");
+      return;
+    }
+
+    cartDrawer.showModal();
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        cartDrawer.classList.add("is-visible");
+      });
+    });
+  }
+
+  function closeCart() {
+    if (!cartDrawer?.open) return;
+
+    cartDrawer.classList.remove("is-visible");
+
+    if (reduceMotion.matches) {
+      cartDrawer.close();
+      return;
+    }
+
+    if (cartCloseTimer) window.clearTimeout(cartCloseTimer);
+    cartCloseTimer = window.setTimeout(() => {
+      cartDrawer.close();
+      cartCloseTimer = undefined;
+    }, 460);
+  }
+
   openButtons.forEach((button) => {
-    button.addEventListener("click", () => cartDrawer?.showModal());
+    button.addEventListener("click", openCart);
   });
 
   closeButtons.forEach((button) => {
-    button.addEventListener("click", () => cartDrawer?.close());
+    button.addEventListener("click", closeCart);
   });
 
   cartDrawer?.addEventListener("click", (event) => {
-    if (event.target === cartDrawer) cartDrawer.close();
+    if (event.target === cartDrawer) closeCart();
+  });
+
+  cartDrawer?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeCart();
   });
 
   checkoutButton?.addEventListener("click", () => {
     if (readCart().length === 0) return;
-    cartDrawer?.close();
-    window.dispatchEvent(new CustomEvent("checkout:open"));
+    closeCart();
+    window.setTimeout(
+      () => window.dispatchEvent(new CustomEvent("checkout:open")),
+      reduceMotion.matches ? 0 : 420,
+    );
   });
 
   window.addEventListener("cart:add", (event) => {
@@ -247,25 +303,47 @@
     }
 
     writeCart(cart);
-    cartDrawer?.showModal();
+    openCart();
+    window.dispatchEvent(
+      new CustomEvent("reboot:notify", {
+        detail: {
+          type: "success",
+          message: existingItem
+            ? "Product quantity updated."
+            : "Product added to your cart.",
+        },
+      }),
+    );
   });
 
+  window.addEventListener("cart:open", openCart);
   window.addEventListener("storage", () => renderCart());
   renderCart();
 </script>
 
 <style>
   #cart-drawer .cart-panel {
-    transform: translateX(100%);
-    transition: transform 250ms ease;
+    transform: translateX(calc(100% + 1rem));
+    transition: transform 460ms cubic-bezier(0.25, 0.1, 0.25, 1);
+    will-change: transform;
   }
 
-  #cart-drawer[open] .cart-panel {
+  #cart-drawer.is-visible .cart-panel {
     transform: translateX(0);
   }
 
+  #cart-drawer::backdrop {
+    background-color: rgb(15 23 42 / 0%);
+    transition: background-color 420ms ease;
+  }
+
+  #cart-drawer.is-visible::backdrop {
+    background-color: rgb(15 23 42 / 60%);
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    #cart-drawer .cart-panel {
+    #cart-drawer .cart-panel,
+    #cart-drawer::backdrop {
       transition: none;
     }
   }

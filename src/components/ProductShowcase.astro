@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { getImage, Image } from "astro:assets";
 import { categories } from "../data/categories";
 import { products } from "../data/products";
 
@@ -28,6 +28,22 @@ const newArrivals = Array.from(
 );
 
 const featuredProduct = products[0];
+
+const cartImageEntries = await Promise.all(
+  products.map(async (product) => {
+    const image = await getImage({
+      src: product.image,
+      width: 320,
+      height: 240,
+      fit: "cover",
+      format: "webp",
+    });
+
+    return [product.slug, image.src] as const;
+  }),
+);
+
+const cartImages = Object.fromEntries(cartImageEntries);
 ---
 
 <section id="products" class="mt-16 scroll-mt-6 space-y-12" aria-label="Product highlights">
@@ -174,13 +190,18 @@ const featuredProduct = products[0];
                 >
                   ★★★★★
                 </span>
-                <a
-                  href="/cart"
+                <button
+                  type="button"
+                  data-cart-product
+                  data-product-slug={product.slug}
+                  data-product-name={product.name}
+                  data-product-price={product.price}
+                  data-product-image={cartImages[product.slug]}
                   aria-label={`Add ${product.name} to cart`}
                   class="flex size-7 items-center justify-center rounded-md bg-violet-600 text-sm font-bold text-white transition hover:bg-violet-700"
                 >
                   +
-                </a>
+                </button>
               </div>
             </div>
           </article>
@@ -278,13 +299,18 @@ const featuredProduct = products[0];
                 >
                   ★★★★★
                 </span>
-                <a
-                  href="/cart"
+                <button
+                  type="button"
+                  data-cart-product
+                  data-product-slug={product.slug}
+                  data-product-name={product.name}
+                  data-product-price={product.price}
+                  data-product-image={cartImages[product.slug]}
                   aria-label={`Add ${product.name} to cart`}
                   class="flex size-7 items-center justify-center rounded-md bg-violet-600 text-sm font-bold text-white transition hover:bg-violet-700"
                 >
                   +
-                </a>
+                </button>
               </div>
             </div>
           </article>
@@ -293,3 +319,24 @@ const featuredProduct = products[0];
     </div>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-cart-product]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const { productSlug, productName, productPrice, productImage } = button.dataset;
+
+      if (!productSlug || !productName || !productPrice || !productImage) return;
+
+      window.dispatchEvent(
+        new CustomEvent("cart:add", {
+          detail: {
+            slug: productSlug,
+            name: productName,
+            price: Number(productPrice),
+            image: productImage,
+          },
+        }),
+      );
+    });
+  });
+</script>

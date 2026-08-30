@@ -204,7 +204,7 @@
 
   checkoutModal?.querySelector<HTMLElement>("[data-checkout-back]")?.addEventListener("click", () => {
     checkoutModal.close();
-    document.querySelector<HTMLDialogElement>("#cart-drawer")?.showModal();
+    window.dispatchEvent(new CustomEvent("cart:open"));
   });
 
   checkoutModal?.addEventListener("click", (event) => {
@@ -215,6 +215,13 @@
     event.preventDefault();
     checkoutMessage?.classList.remove("hidden");
     checkoutMessage?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    window.dispatchEvent(
+      new CustomEvent("reboot:notify", {
+        detail: {
+          type: "info",
+          message: "Checkout details validated. Payment is not connected yet.",
+        },
+      }),
+    );
   });
 </script>
-
