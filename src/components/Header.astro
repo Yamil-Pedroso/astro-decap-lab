@@ -9,6 +9,7 @@ const isShopActive =
 	pathname === "/" || pathname.startsWith("/products");
 const isCategoriesActive = pathname.startsWith("/categories");
 const isAboutActive = pathname.startsWith("/about");
+const isContactActive = pathname.startsWith("/contact");
 ---
 
 <header class="border-b border-slate-200 bg-white">
@@ -55,6 +56,17 @@ const isAboutActive = pathname.startsWith("/about");
 				aria-current={isAboutActive ? "page" : undefined}
 			>
 				About
+			</a>
+
+			<a
+				href="/contact"
+				class:list={[
+					"transition hover:text-violet-600",
+					isContactActive && "text-violet-600",
+				]}
+				aria-current={isContactActive ? "page" : undefined}
+			>
+				Contact
 			</a>
 		</nav>
 
