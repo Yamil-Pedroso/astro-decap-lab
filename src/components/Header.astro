@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import assets from "../assets";
 import CartDrawer from "./CartDrawer.astro";
 import CheckoutModal from "./CheckoutModal.astro";
+import SearchModal from "./SearchModal.astro";
 
 const pathname = Astro.url.pathname;
 const isShopActive =
@@ -73,6 +74,9 @@ const isContactActive = pathname.startsWith("/contact");
 		<div class="flex items-center gap-3">
 			<button
 				type="button"
+				data-search-open
+				aria-controls="search-modal"
+				aria-haspopup="dialog"
 				class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-600 transition hover:border-violet-300 hover:text-violet-600"
 			>
 				Search
@@ -99,3 +103,4 @@ const isContactActive = pathname.startsWith("/contact");
 
 <CartDrawer />
 <CheckoutModal />
+<SearchModal />
