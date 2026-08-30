@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import assets from "../assets";
 import CartDrawer from "./CartDrawer.astro";
+import CheckoutModal from "./CheckoutModal.astro";
 
 const pathname = Astro.url.pathname;
 const isShopActive =
@@ -85,3 +86,4 @@ const isAboutActive = pathname.startsWith("/about");
 </header>
 
 <CartDrawer />
+<CheckoutModal />

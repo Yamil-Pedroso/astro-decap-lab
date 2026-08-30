@@ -229,6 +229,12 @@
     if (event.target === cartDrawer) cartDrawer.close();
   });
 
+  checkoutButton?.addEventListener("click", () => {
+    if (readCart().length === 0) return;
+    cartDrawer?.close();
+    window.dispatchEvent(new CustomEvent("checkout:open"));
+  });
+
   window.addEventListener("cart:add", (event) => {
     const product = (event as CustomEvent<Omit<CartItem, "quantity">>).detail;
     const cart = readCart();
