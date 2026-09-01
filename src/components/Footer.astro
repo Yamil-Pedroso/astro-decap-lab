@@ -1,3 +1,7 @@
+---
+import { footerNavigation } from "../data/navigation";
+---
+
 <footer class="mt-24 bg-[#0a0a0c] text-white">
   <div class="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8">
     <!-- Main footer -->
@@ -25,100 +29,23 @@
 
       <!-- Navigation -->
       <div class="grid grid-cols-2 gap-10 sm:grid-cols-3">
-        <div>
-          <p
-            class="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500"
-          >
-            Shop
-          </p>
+        {footerNavigation.map((group) => (
+          <div>
+            <p class="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+              {group.title}
+            </p>
 
-          <ul class="space-y-3 text-sm text-slate-300">
-            <li>
-              <a
-                class="transition hover:text-violet-400"
-                href="/categories/laptops"
-              >
-                Laptops
-              </a>
-            </li>
-            <li>
-              <a
-                class="transition hover:text-violet-400"
-                href="/categories/desktops"
-              >
-                Desktops
-              </a>
-            </li>
-            <li>
-              <a
-                class="transition hover:text-violet-400"
-                href="/categories/monitors"
-              >
-                Monitors
-              </a>
-            </li>
-            <li>
-              <a
-                class="transition hover:text-violet-400"
-                href="/categories/components"
-              >
-                Components
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <p
-            class="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500"
-          >
-            Reboot Lab
-          </p>
-
-          <ul class="space-y-3 text-sm text-slate-300">
-            <li>
-              <a class="transition hover:text-violet-400" href="/about">
-                About
-              </a>
-            </li>
-            <li>
-              <a class="transition hover:text-violet-400" href="/products">
-                Products
-              </a>
-            </li>
-            <li>
-              <a class="transition hover:text-violet-400" href="/contact">
-                Contact
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <p
-            class="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500"
-          >
-            Info
-          </p>
-
-          <ul class="space-y-3 text-sm text-slate-300">
-            <li>
-              <a class="transition hover:text-violet-400" href="/shipping">
-                Shipping
-              </a>
-            </li>
-            <li>
-              <a class="transition hover:text-violet-400" href="/warranty">
-                Warranty
-              </a>
-            </li>
-            <li>
-              <a class="transition hover:text-violet-400" href="/privacy">
-                Privacy
-              </a>
-            </li>
-          </ul>
-        </div>
+            <ul class="space-y-3 text-sm text-slate-300">
+              {group.links.map((link) => (
+                <li>
+                  <a class="transition hover:text-violet-400" href={link.href}>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </div>
 

@@ -123,13 +123,7 @@
 </dialog>
 
 <script>
-  interface CheckoutCartItem {
-    slug: string;
-    name: string;
-    price: number;
-    image: string;
-    quantity: number;
-  }
+  import type { CartItem } from "../types/cart";
 
   const checkoutModal = document.querySelector<HTMLDialogElement>("#checkout-modal");
   const checkoutItems = checkoutModal?.querySelector<HTMLElement>("[data-checkout-items]");
@@ -142,7 +136,7 @@
     maximumFractionDigits: 2,
   });
 
-  function getCheckoutCart(): CheckoutCartItem[] {
+  function getCheckoutCart(): CartItem[] {
     try {
       const cart = JSON.parse(localStorage.getItem("reboot-lab-cart") ?? "[]");
       return Array.isArray(cart) ? cart : [];

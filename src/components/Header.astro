@@ -1,16 +1,14 @@
 ---
 import { Image } from "astro:assets";
 import assets from "../assets";
+import { headerNavigation } from "../data/navigation";
 import CartDrawer from "./CartDrawer.astro";
 import CheckoutModal from "./CheckoutModal.astro";
 import SearchModal from "./SearchModal.astro";
 
 const pathname = Astro.url.pathname;
-const isShopActive =
-	pathname === "/" || pathname.startsWith("/products");
-const isCategoriesActive = pathname.startsWith("/categories");
-const isAboutActive = pathname.startsWith("/about");
-const isContactActive = pathname.startsWith("/contact");
+const isActive = ({ activePaths, exactPaths = [] }: (typeof headerNavigation)[number]) =>
+	exactPaths.includes(pathname) || activePaths.some((path) => pathname.startsWith(path));
 ---
 
 <header class="border-b border-slate-200 bg-white">
@@ -26,49 +24,22 @@ const isContactActive = pathname.startsWith("/contact");
 		</a>
 
 		<nav class="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
-			<a
-				href="/"
-				class:list={[
-					"transition hover:text-violet-600",
-					isShopActive && "text-violet-600",
-				]}
-				aria-current={isShopActive ? "page" : undefined}
-			>
-				Shop
-			</a>
+			{headerNavigation.map((item) => {
+				const active = isActive(item);
 
-			<a
-				href="/categories"
-				class:list={[
-					"transition hover:text-violet-600",
-					isCategoriesActive && "text-violet-600",
-				]}
-				aria-current={isCategoriesActive ? "page" : undefined}
-			>
-				Categories
-			</a>
-
-			<a
-				href="/about"
-				class:list={[
-					"transition hover:text-violet-600",
-					isAboutActive && "text-violet-600",
-				]}
-				aria-current={isAboutActive ? "page" : undefined}
-			>
-				About
-			</a>
-
-			<a
-				href="/contact"
-				class:list={[
-					"transition hover:text-violet-600",
-					isContactActive && "text-violet-600",
-				]}
-				aria-current={isContactActive ? "page" : undefined}
-			>
-				Contact
-			</a>
+				return (
+					<a
+						href={item.href}
+						class:list={[
+							"transition hover:text-violet-600",
+							active && "text-violet-600",
+						]}
+						aria-current={active ? "page" : undefined}
+					>
+						{item.label}
+					</a>
+				);
+			})}
 		</nav>
 
 		<div class="flex items-center gap-3">

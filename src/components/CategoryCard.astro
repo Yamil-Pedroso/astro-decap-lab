@@ -1,9 +1,7 @@
 ---
-interface Props {
-  name: string;
-  slug: string;
-  description: string;
-}
+import type { CategoryCardProps } from "../types/category";
+
+type Props = CategoryCardProps;
 
 const { name, slug, description } = Astro.props;
 ---

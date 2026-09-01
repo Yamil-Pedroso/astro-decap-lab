@@ -1,11 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import { products } from "../data/products";
-
-const bestSellers = Array.from(
-  { length: 5 },
-  (_, index) => products[index % products.length],
-);
+import { bestSellers } from "../data/best-sellers";
 ---
 
 <section class="mt-12" aria-labelledby="best-sellers-title">

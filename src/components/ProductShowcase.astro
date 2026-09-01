@@ -1,33 +1,12 @@
 ---
 import { getImage, Image } from "astro:assets";
-import { categories } from "../data/categories";
+import {
+  featuredProduct,
+  flashDeals,
+  newArrivals,
+  productCollections,
+} from "../data/product-showcase";
 import { products } from "../data/products";
-
-const collectionTones = [
-  "bg-violet-50",
-  "bg-slate-100",
-  "bg-blue-50",
-  "bg-lime-50",
-];
-
-const collections = categories.map((category, index) => ({
-  ...category,
-  image: products.find((product) => product.category === category.slug)?.image,
-  tone: collectionTones[index],
-}));
-
-const discounts = [20, 15, 30, 20, 10, 15];
-const flashDeals = Array.from({ length: 6 }, (_, index) => ({
-  product: products[index % products.length],
-  discount: discounts[index],
-}));
-
-const newArrivals = Array.from(
-  { length: 4 },
-  (_, index) => products[(index + 1) % products.length],
-);
-
-const featuredProduct = products[0];
 
 const cartImageEntries = await Promise.all(
   products.map(async (product) => {
@@ -69,7 +48,7 @@ const cartImages = Object.fromEntries(cartImageEntries);
 
     <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {
-        collections.map((collection) => (
+        productCollections.map((collection) => (
           <a
             href={`/categories/${collection.slug}`}
             class:list={[

@@ -1,10 +1,8 @@
 ---
 import { getImage, Image } from "astro:assets";
-import type { Product } from "../types/product";
+import type { ProductCardProps } from "../types/product";
 
-interface Props {
-  product: Product;
-}
+type Props = ProductCardProps;
 
 const { product } = Astro.props;
 const cartImage = await getImage({

@@ -104,13 +104,7 @@
 </dialog>
 
 <script>
-  interface CartItem {
-    slug: string;
-    name: string;
-    price: number;
-    image: string;
-    quantity: number;
-  }
+  import type { CartItem } from "../types/cart";
 
   const CART_STORAGE_KEY = "reboot-lab-cart";
   const cartDrawer = document.querySelector<HTMLDialogElement>("#cart-drawer");

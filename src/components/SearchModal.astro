@@ -2,13 +2,7 @@
 import { Image } from "astro:assets";
 import { categories } from "../data/categories";
 import { products } from "../data/products";
-
-const categoryCounts = Object.fromEntries(
-  categories.map((category) => [
-    category.slug,
-    products.filter((product) => product.category === category.slug).length,
-  ]),
-);
+import { categoryProductCounts } from "../data/search";
 ---
 
 <dialog
@@ -84,7 +78,7 @@ const categoryCounts = Object.fromEntries(
               <div>
                 <p class="text-[9px] font-semibold uppercase tracking-[0.16em] text-slate-400">Category</p>
                 <h3 class="mt-1 text-sm font-bold text-slate-950 group-hover:text-violet-700">{category.name}</h3>
-                <p class="mt-1 text-xs text-slate-500">{categoryCounts[category.slug]} {categoryCounts[category.slug] === 1 ? "item" : "items"}</p>
+                <p class="mt-1 text-xs text-slate-500">{categoryProductCounts[category.slug]} {categoryProductCounts[category.slug] === 1 ? "item" : "items"}</p>
               </div>
               <span class="flex size-9 items-center justify-center rounded-full bg-slate-950 text-sm text-white transition group-hover:bg-violet-600">→</span>
             </a>

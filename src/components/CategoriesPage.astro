@@ -1,22 +1,8 @@
 ---
 import { Image } from "astro:assets";
-import assets from "../assets";
 import { categories } from "../data/categories";
+import { categoryItems } from "../data/category-page";
 import { products } from "../data/products";
-
-const categoryImages = {
-  laptops: assets.laptop1,
-  desktops: assets.desktop1,
-  monitors: assets.monitor1,
-  components: assets.component1,
-};
-
-const categoryItems = categories.map((category) => ({
-  ...category,
-  image: categoryImages[category.slug as keyof typeof categoryImages],
-  itemCount: products.filter((product) => product.category === category.slug)
-    .length,
-}));
 ---
 
 <section class="py-10 lg:py-16">

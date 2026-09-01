@@ -1,11 +1,7 @@
 <script>
   import Notify from "simple-notify";
   import "simple-notify/dist/simple-notify.css";
-
-  interface NotificationDetail {
-    type?: "success" | "info" | "error";
-    message: string;
-  }
+  import type { NotificationDetail } from "../types/notification";
 
   window.addEventListener("reboot:notify", (event) => {
     const { type = "info", message } = (event as CustomEvent<NotificationDetail>).detail;

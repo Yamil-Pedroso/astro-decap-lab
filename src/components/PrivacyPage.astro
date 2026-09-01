@@ -1,10 +1,5 @@
 ---
-const sections = [
-  { number: "01", title: "Information we use", text: "Contact, delivery and order details are used only to provide the requested store services." },
-  { number: "02", title: "Why we use it", text: "Information supports order fulfilment, customer assistance, fraud prevention and legal obligations." },
-  { number: "03", title: "Storage and security", text: "Production data should be encrypted, access-controlled and retained only for as long as necessary." },
-  { number: "04", title: "Your choices", text: "Customers can request access, correction or deletion where applicable under data-protection law." },
-];
+import { privacySections } from "../data/privacy";
 ---
 
 <section class="py-10 lg:py-16">
@@ -20,7 +15,7 @@ const sections = [
   </div>
 
   <div class="mt-8 grid gap-4 md:grid-cols-2">
-    {sections.map((section) => (
+    {privacySections.map((section) => (
       <article class="rounded-2xl border border-slate-200 bg-white p-7 sm:p-8">
         <span class="text-xs font-bold text-violet-600">/{section.number}</span>
         <h2 class="mt-8 text-2xl font-bold tracking-tight text-slate-950">{section.title}</h2>
