@@ -6,6 +6,11 @@ export interface Category {
   description: string;
 }
 
+export interface CategoryContent extends Category {
+  image: ImageMetadata;
+  order: number;
+}
+
 export type CategoryCardProps = Category;
 
 export interface CategoryPageItem extends Category {
@@ -21,14 +26,4 @@ export interface CategoryIcon {
 export interface CategoryIconItem extends Category {
   itemCount: number;
   paths: string[];
-}
-
-export interface CategoryPromo {
-  slug: Category["slug"];
-  eyebrow?: string;
-  title: string;
-  description: string;
-  cta: string;
-  price?: string;
-  image: ImageMetadata;
 }

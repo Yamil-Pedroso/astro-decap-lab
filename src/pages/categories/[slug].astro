@@ -1,26 +1,36 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { categories } from "../../data/categories";
-import { products } from "../../data/products";
 import ProductCard from "../../components/ProductCard.astro";
-import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const [productEntries, categoryEntries] = await Promise.all([
+    getCollection("products"),
+    getCollection("categories"),
+  ]);
+  const products = productEntries.map((entry) => ({
+    slug: entry.id,
+    ...entry.data,
+  }));
+  const categories = categoryEntries.map((entry) => ({
+    slug: entry.id,
+    ...entry.data,
+  }));
+
   return categories.map((category) => ({
     params: {
       slug: category.slug,
     },
     props: {
       category,
+      categoryProducts: products.filter(
+        (product) => product.category === category.slug,
+      ),
     },
   }));
 }
 
-const { category } = Astro.props;
-
-const categoryProducts = products.filter(
-  (product) => product.category === category.slug,
-);
+const { category, categoryProducts } = Astro.props;
 ---
 
 <Layout title={`${category.name} | Reboot Lab`}>

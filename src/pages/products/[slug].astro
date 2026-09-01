@@ -1,15 +1,20 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import ProductDetailCard from "../../components/ProductDetailCard.astro";
-import { products } from "../../data/products";
+import { getCollection } from "astro:content";
 
-export function getStaticPaths() {
-  return products.map((product) => ({
+export async function getStaticPaths() {
+  const entries = await getCollection("products");
+
+  return entries.map((entry) => ({
     params: {
-      slug: product.slug,
+      slug: entry.id,
     },
     props: {
-      product,
+      product: {
+        slug: entry.id,
+        ...entry.data,
+      },
     },
   }));
 }

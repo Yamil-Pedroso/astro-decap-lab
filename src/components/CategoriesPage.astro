@@ -1,8 +1,23 @@
 ---
 import { Image } from "astro:assets";
-import { categories } from "../data/categories";
-import { categoryItems } from "../data/category-page";
-import { products } from "../data/products";
+import { getCollection, getEntry } from "astro:content";
+import { createCategoryItems } from "../data/category-page";
+
+const [productEntries, categoryEntries, page] = await Promise.all([
+  getCollection("products"),
+  getCollection("categories"),
+  getEntry("pages", "categories"),
+]);
+if (!page || page.data.template !== "categories") throw new Error("Categories page content not found");
+const products = productEntries.map((entry) => ({
+  slug: entry.id,
+  ...entry.data,
+}));
+const categories = categoryEntries
+  .map((entry) => ({ slug: entry.id, ...entry.data }))
+  .sort((a, b) => a.order - b.order);
+const categoryItems = createCategoryItems(categories, products);
+const content = page.data;
 ---
 
 <section class="py-10 lg:py-16">
@@ -13,17 +28,15 @@ import { products } from "../data/products";
       <p
         class="text-xs font-semibold uppercase tracking-[0.22em] text-violet-400"
       >
-        Browse the lab
+        {content.eyebrow}
       </p>
       <h1
         class="mt-5 max-w-3xl text-5xl font-bold tracking-tight sm:text-6xl"
       >
-        Hardware selected for another cycle.
+        {content.title}
       </h1>
       <p class="mt-6 max-w-2xl text-base leading-7 text-slate-300">
-        Explore tested refurbished technology organized by category. Every
-        product is selected to deliver reliable performance and extend the
-        useful life of existing hardware.
+        {content.description}
       </p>
     </div>
 
@@ -46,8 +59,7 @@ import { products } from "../data/products";
       </div>
       <div class="col-span-2 flex items-center p-6">
         <p class="text-sm leading-6 text-slate-400">
-          Laptops, desktops, monitors and reusable components ready to return
-          to work.
+          {content.summary}
         </p>
       </div>
     </div>

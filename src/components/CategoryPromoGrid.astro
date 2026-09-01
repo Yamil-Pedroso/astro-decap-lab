@@ -1,12 +1,34 @@
 ---
 import { Image } from "astro:assets";
-import { categoryPromos } from "../data/category-promos";
+import { getCollection, getEntry } from "astro:content";
 
-const [laptopPromo, desktopPromo, monitorPromo, componentPromo] = categoryPromos;
+const [promotionEntries, productEntries, page] = await Promise.all([
+  getCollection("promotions"),
+  getCollection("products"),
+  getEntry("pages", "home"),
+]);
+if (!page || page.data.template !== "home") throw new Error("Home content not found");
+const products = new Map(productEntries.map((entry) => [entry.id, entry.data]));
+const promotions = promotionEntries.map((entry) => {
+  const product = entry.data.product ? products.get(entry.data.product) : undefined;
+  return {
+    ...entry.data,
+    slug: entry.data.category,
+    title: entry.data.title ?? product?.name ?? "",
+    price: entry.data.showProductPrice && product ? `From CHF ${product.price}` : undefined,
+  };
+});
+const laptopPromo = promotions.find(({ slot }) => slot === "laptop");
+const desktopPromo = promotions.find(({ slot }) => slot === "desktop");
+const monitorPromo = promotions.find(({ slot }) => slot === "monitor");
+const componentPromo = promotions.find(({ slot }) => slot === "component");
+if (!laptopPromo || !desktopPromo || !monitorPromo || !componentPromo) {
+  throw new Error("Category promotion content is incomplete");
+}
 ---
 
 <section class="mt-3" aria-labelledby="category-promos-title">
-  <h2 id="category-promos-title" class="sr-only">Featured categories</h2>
+  <h2 id="category-promos-title" class="sr-only">{page.data.promotionsTitle}</h2>
 
   <div
     class="grid gap-4 md:grid-cols-2 lg:grid-cols-[1.05fr_0.8fr_1.35fr]"

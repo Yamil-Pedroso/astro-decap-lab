@@ -1,7 +1,10 @@
 ---
 import { Image } from "astro:assets";
-import assets from "../assets";
-import { aboutValues } from "../data/about";
+import { getEntry } from "astro:content";
+
+const page = await getEntry("pages", "about");
+if (!page || page.data.template !== "about") throw new Error("About content not found");
+const content = page.data;
 ---
 
 <section class="py-10 lg:py-16">
@@ -12,24 +15,22 @@ import { aboutValues } from "../data/about";
       <p
         class="text-xs font-semibold uppercase tracking-[0.22em] text-violet-400"
       >
-        About Reboot Lab
+        {content.eyebrow}
       </p>
       <h1
         class="mt-5 max-w-2xl text-5xl font-bold tracking-tight sm:text-6xl"
       >
-        Good hardware deserves another cycle.
+        {content.title}
       </h1>
       <p class="mt-6 max-w-xl text-base leading-7 text-slate-300">
-        Reboot Lab is a fictional refurbished technology shop and an
-        architecture laboratory for learning how modern, content-driven web
-        projects are designed, built and deployed.
+        {content.description}
       </p>
     </div>
 
     <div class="relative min-h-96 overflow-hidden">
       <Image
-        src={assets.hero1}
-        alt="Refurbished technology illuminated with violet light"
+        src={content.image}
+        alt={content.imageAlt}
         class="absolute inset-0 h-full w-full object-cover"
       />
       <div
@@ -44,61 +45,43 @@ import { aboutValues } from "../data/about";
       <p
         class="text-xs font-semibold uppercase tracking-[0.22em] text-violet-600"
       >
-        The idea
+        {content.ideaEyebrow}
       </p>
       <h2 class="mt-4 text-4xl font-bold tracking-tight text-slate-950">
-        Technology can remain useful for much longer.
+        {content.ideaTitle}
       </h2>
     </div>
 
     <div class="space-y-5 text-base leading-8 text-slate-600">
-      <p>
-        Computers and components are often replaced while they still have
-        years of productive life ahead. Reboot Lab explores a more deliberate
-        model: inspect, repair, reuse and return capable hardware to service.
-      </p>
-      <p>
-        The project is also being developed incrementally as a practical lab
-        for Astro, Git-managed content, Decap CMS and modern deployment
-        workflows. Every layer is introduced with a clear architectural reason.
-      </p>
+      {content.ideaParagraphs.map((paragraph) => <p>{paragraph}</p>)}
     </div>
   </div>
 
   <div class="grid overflow-hidden rounded-2xl bg-violet-600 text-white sm:grid-cols-3">
-    <div class="border-b border-white/15 p-7 sm:border-b-0 sm:border-r">
-      <p class="text-4xl font-bold">100%</p>
-      <p class="mt-2 text-xs uppercase tracking-[0.18em] text-violet-200">
-        Static-first
-      </p>
-    </div>
-    <div class="border-b border-white/15 p-7 sm:border-b-0 sm:border-r">
-      <p class="text-4xl font-bold">4</p>
-      <p class="mt-2 text-xs uppercase tracking-[0.18em] text-violet-200">
-        Hardware categories
-      </p>
-    </div>
-    <div class="p-7">
-      <p class="text-4xl font-bold">1</p>
-      <p class="mt-2 text-xs uppercase tracking-[0.18em] text-violet-200">
-        Shared mission
-      </p>
-    </div>
+    {content.stats.map((stat, index) => (
+      <div class:list={[
+        "p-7",
+        index < content.stats.length - 1 && "border-b border-white/15 sm:border-b-0 sm:border-r",
+      ]}>
+        <p class="text-4xl font-bold">{stat.value}</p>
+        <p class="mt-2 text-xs uppercase tracking-[0.18em] text-violet-200">{stat.label}</p>
+      </div>
+    ))}
   </div>
 
   <div class="py-16">
     <p
       class="text-xs font-semibold uppercase tracking-[0.22em] text-violet-600"
     >
-      Principles
+      {content.principlesEyebrow}
     </p>
     <h2 class="mt-4 text-4xl font-bold tracking-tight text-slate-950">
-      How the lab thinks.
+      {content.principlesTitle}
     </h2>
 
     <div class="mt-8 grid gap-4 md:grid-cols-3">
       {
-        aboutValues.map((value) => (
+        content.principles.map((value) => (
           <article class="border border-slate-200 bg-white p-7">
             <span class="text-xs font-bold text-violet-600">/{value.number}</span>
             <h3 class="mt-10 text-2xl font-bold tracking-tight text-slate-950">

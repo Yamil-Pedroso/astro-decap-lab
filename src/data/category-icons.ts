@@ -1,6 +1,9 @@
-import type { CategoryIcon, CategoryIconItem } from "../types/category";
-import { categories } from "./categories";
-import { products } from "./products";
+import type {
+  CategoryContent,
+  CategoryIcon,
+  CategoryIconItem,
+} from "../types/category";
+import type { Product } from "../types/product";
 
 export const categoryIcons: CategoryIcon[] = [
   {
@@ -35,12 +38,14 @@ export const categoryIcons: CategoryIcon[] = [
   },
 ];
 
-export const categoryIconItems: CategoryIconItem[] = categories.map(
-  (category) => ({
+export const createCategoryIconItems = (
+  categories: CategoryContent[],
+  products: Product[],
+): CategoryIconItem[] =>
+  categories.map((category) => ({
     ...category,
     itemCount: products.filter((product) => product.category === category.slug)
       .length,
     paths:
       categoryIcons.find((icon) => icon.slug === category.slug)?.paths ?? [],
-  }),
-);
+  }));

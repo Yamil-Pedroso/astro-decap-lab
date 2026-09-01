@@ -1,9 +1,25 @@
 ---
-import { categoryIconItems } from "../data/category-icons";
+import { getCollection, getEntry } from "astro:content";
+import { createCategoryIconItems } from "../data/category-icons";
+
+const [productEntries, categoryEntries, page] = await Promise.all([
+  getCollection("products"),
+  getCollection("categories"),
+  getEntry("pages", "home"),
+]);
+if (!page || page.data.template !== "home") throw new Error("Home content not found");
+const products = productEntries.map((entry) => ({
+  slug: entry.id,
+  ...entry.data,
+}));
+const categories = categoryEntries
+  .map((entry) => ({ slug: entry.id, ...entry.data }))
+  .sort((a, b) => a.order - b.order);
+const categoryIconItems = createCategoryIconItems(categories, products);
 ---
 
 <section class="mt-6" aria-labelledby="category-strip-title">
-  <h2 id="category-strip-title" class="sr-only">Product categories</h2>
+  <h2 id="category-strip-title" class="sr-only">{page.data.categoryStripTitle}</h2>
 
   <div class="flex snap-x snap-mandatory overflow-x-auto">
     {

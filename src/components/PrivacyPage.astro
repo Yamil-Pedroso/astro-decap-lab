@@ -1,21 +1,25 @@
 ---
-import { privacySections } from "../data/privacy";
+import { getEntry } from "astro:content";
+
+const page = await getEntry("pages", "privacy");
+if (!page || page.data.template !== "privacy") throw new Error("Privacy content not found");
+const content = page.data;
 ---
 
 <section class="py-10 lg:py-16">
   <div class="rounded-3xl bg-[#08080f] p-8 text-white sm:p-12 lg:p-16">
     <div class="flex flex-wrap items-start justify-between gap-8">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-violet-400">Privacy</p>
-        <h1 class="mt-5 max-w-4xl text-5xl font-bold tracking-tight sm:text-6xl">Clear data practices build better trust.</h1>
-        <p class="mt-6 max-w-2xl text-base leading-7 text-slate-300">A concise overview of how Reboot Lab would handle customer information in a production store.</p>
+        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-violet-400">{content.eyebrow}</p>
+        <h1 class="mt-5 max-w-4xl text-5xl font-bold tracking-tight sm:text-6xl">{content.title}</h1>
+        <p class="mt-6 max-w-2xl text-base leading-7 text-slate-300">{content.description}</p>
       </div>
-      <span class="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Updated August 2026</span>
+      <span class="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{content.updated}</span>
     </div>
   </div>
 
   <div class="mt-8 grid gap-4 md:grid-cols-2">
-    {privacySections.map((section) => (
+    {content.sections.map((section) => (
       <article class="rounded-2xl border border-slate-200 bg-white p-7 sm:p-8">
         <span class="text-xs font-bold text-violet-600">/{section.number}</span>
         <h2 class="mt-8 text-2xl font-bold tracking-tight text-slate-950">{section.title}</h2>
@@ -25,7 +29,7 @@ import { privacySections } from "../data/privacy";
   </div>
 
   <div class="mt-8 flex flex-col gap-6 rounded-2xl bg-violet-600 p-7 text-white sm:flex-row sm:items-center sm:justify-between sm:p-9">
-    <div><p class="text-xs font-semibold uppercase tracking-[0.18em] text-violet-200">Privacy questions</p><h2 class="mt-2 text-2xl font-bold">Want to know more about your data?</h2></div>
-    <a href="/contact" class="shrink-0 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-violet-700">Contact us →</a>
+    <div><p class="text-xs font-semibold uppercase tracking-[0.18em] text-violet-200">{content.ctaEyebrow}</p><h2 class="mt-2 text-2xl font-bold">{content.ctaTitle}</h2></div>
+    <a href={content.action.href} class="shrink-0 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-violet-700">{content.action.label} →</a>
   </div>
 </section>

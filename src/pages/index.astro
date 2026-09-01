@@ -1,4 +1,6 @@
 ---
+import { getCollection } from "astro:content";
+
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import CategoryIconStrip from "../components/CategoryIconStrip.astro";
@@ -7,13 +9,20 @@ import ProductShowcase from "../components/ProductShowcase.astro";
 import BestSellersStrip from "../components/BestSellersStrip.astro";
 import ServiceBenefitsStrip from "../components/ServiceBenefitsStrip.astro";
 import CategoriesSection from "../components/CategoriesSection.astro";
+
+const entries = await getCollection("products");
+
+const products = entries.map((entry) => ({
+  slug: entry.id,
+  ...entry.data,
+}));
 ---
 
 <Layout title="Reboot Lab | Refurbished Technology">
   <Hero />
   <CategoryIconStrip />
   <CategoryPromoGrid />
-  <ProductShowcase />
+  <ProductShowcase products={products} />
   <BestSellersStrip />
   <ServiceBenefitsStrip />
   <CategoriesSection />

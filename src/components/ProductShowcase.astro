@@ -1,12 +1,46 @@
 ---
 import { getImage, Image } from "astro:assets";
-import {
-  featuredProduct,
-  flashDeals,
-  newArrivals,
-  productCollections,
-} from "../data/product-showcase";
-import { products } from "../data/products";
+import { getCollection, getEntry } from "astro:content";
+import { collectionTones } from "../data/product-showcase";
+import type { FlashDeal, Product, ProductCollection } from "../types/product";
+
+interface Props {
+  products: Product[];
+}
+
+const { products } = Astro.props;
+const [categoryEntries, page] = await Promise.all([
+  getCollection("categories"),
+  getEntry("pages", "home"),
+]);
+if (!page || page.data.template !== "home") throw new Error("Home content not found");
+const categories = categoryEntries
+  .map((entry) => ({ slug: entry.id, ...entry.data }))
+  .sort((a, b) => a.order - b.order);
+const content = page.data.showcase;
+const productsBySlug = new Map(products.map((product) => [product.slug, product]));
+
+const productCollections: ProductCollection[] = categories.map((category) => ({
+  ...category,
+  image: products.find((product) => product.category === category.slug)?.image,
+  tone: collectionTones[category.slug] ?? "bg-slate-100",
+}));
+
+const flashDeals: FlashDeal[] = content.flashDeals.flatMap((config) => {
+  const product = productsBySlug.get(config.product);
+  return product ? [{ product, discount: config.discount }] : [];
+});
+
+const newArrivals = content.newArrivals.flatMap((slug) => {
+  const product = productsBySlug.get(slug);
+  return product ? [product] : [];
+});
+
+const featuredProduct = productsBySlug.get(content.featuredProduct);
+
+if (!featuredProduct) {
+  throw new Error(`Featured product not found: ${content.featuredProduct}`);
+}
 
 const cartImageEntries = await Promise.all(
   products.map(async (product) => {
@@ -25,24 +59,24 @@ const cartImageEntries = await Promise.all(
 const cartImages = Object.fromEntries(cartImageEntries);
 ---
 
-<section id="products" class="mt-16 scroll-mt-6 space-y-12" aria-label="Product highlights">
+<section id="products" class="mt-16 scroll-mt-6 space-y-12" aria-label={content.ariaLabel}>
   <div>
     <div class="mb-5 flex items-end justify-between gap-4">
       <div>
         <p
           class="text-[10px] font-semibold uppercase tracking-[0.2em] text-violet-600"
         >
-          Browse the lab
+          {content.collectionsEyebrow}
         </p>
         <h2 class="mt-2 text-2xl font-bold tracking-tight text-slate-950">
-          Featured collections
+          {content.collectionsTitle}
         </h2>
       </div>
       <a
         href="/categories"
         class="text-xs font-semibold text-slate-500 transition hover:text-violet-600"
       >
-        View all →
+        {content.collectionsViewAll}
       </a>
     </div>
 
@@ -71,7 +105,7 @@ const cartImages = Object.fromEntries(cartImageEntries);
                 {collection.description}
               </p>
               <span class="mt-2 inline-flex text-[11px] font-semibold text-violet-600">
-                Explore now →
+                {content.collectionCta}
               </span>
             </div>
           </a>
@@ -87,30 +121,30 @@ const cartImages = Object.fromEntries(cartImageEntries);
           <p
             class="text-[10px] font-semibold uppercase tracking-[0.2em] text-violet-600"
           >
-            Limited offers
+            {content.dealsEyebrow}
           </p>
           <h2 class="mt-2 text-2xl font-bold tracking-tight text-slate-950">
-            Flash deals
+            {content.dealsTitle}
           </h2>
         </div>
 
         <div class="flex items-center gap-2" aria-label="Offer countdown">
           <div class="text-center">
-            <span class="block text-sm font-bold text-slate-950">07</span>
+            <span class="block text-sm font-bold text-slate-950">{content.countdown.days}</span>
             <span class="text-[8px] uppercase tracking-wider text-slate-400">
               Days
             </span>
           </div>
           <span class="pb-3 text-slate-300">:</span>
           <div class="text-center">
-            <span class="block text-sm font-bold text-slate-950">45</span>
+            <span class="block text-sm font-bold text-slate-950">{content.countdown.hours}</span>
             <span class="text-[8px] uppercase tracking-wider text-slate-400">
               Hours
             </span>
           </div>
           <span class="pb-3 text-slate-300">:</span>
           <div class="text-center">
-            <span class="block text-sm font-bold text-slate-950">32</span>
+            <span class="block text-sm font-bold text-slate-950">{content.countdown.minutes}</span>
             <span class="text-[8px] uppercase tracking-wider text-slate-400">
               Mins
             </span>
@@ -122,7 +156,7 @@ const cartImages = Object.fromEntries(cartImageEntries);
         href="/products"
         class="text-xs font-semibold text-slate-500 transition hover:text-violet-600"
       >
-        View all deals →
+        {content.dealsViewAll}
       </a>
     </div>
 
@@ -195,17 +229,17 @@ const cartImages = Object.fromEntries(cartImageEntries);
         <p
           class="text-[10px] font-semibold uppercase tracking-[0.2em] text-violet-600"
         >
-          Freshly tested
+          {content.arrivalsEyebrow}
         </p>
         <h2 class="mt-2 text-2xl font-bold tracking-tight text-slate-950">
-          New arrivals
+          {content.arrivalsTitle}
         </h2>
       </div>
       <a
         href="/products"
         class="text-xs font-semibold text-slate-500 transition hover:text-violet-600"
       >
-        View all →
+        {content.arrivalsViewAll}
       </a>
     </div>
 
@@ -228,19 +262,19 @@ const cartImages = Object.fromEntries(cartImageEntries);
           <span
             class="rounded-md bg-violet-600 px-2 py-1 text-[9px] font-bold uppercase tracking-wider"
           >
-            Just arrived
+            {content.featuredBadge}
           </span>
           <h3 class="mt-4 text-2xl font-bold tracking-tight">
             {featuredProduct.name}
           </h3>
           <p class="mt-2 text-xs leading-5 text-violet-100">
-            Adapted, tested and ready for another productive cycle.
+            {content.featuredDescription}
           </p>
           <p class="mt-4 text-base font-bold">CHF {featuredProduct.price}</p>
           <span
             class="mt-5 inline-flex rounded-lg bg-white px-4 py-2 text-xs font-semibold text-violet-900 transition group-hover:bg-violet-500 group-hover:text-white"
           >
-            Explore now →
+            {content.featuredCta}
           </span>
         </div>
       </a>
@@ -258,7 +292,7 @@ const cartImages = Object.fromEntries(cartImageEntries);
                 class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
               />
               <span class="absolute left-3 top-3 rounded-md bg-violet-600 px-2 py-1 text-[9px] font-bold uppercase text-white">
-                New
+                {content.newBadge}
               </span>
             </a>
             <div class="p-3">

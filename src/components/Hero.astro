@@ -1,6 +1,10 @@
 ---
 import { Image } from "astro:assets";
-import { heroContent } from "../data/hero";
+import { getEntry } from "astro:content";
+
+const page = await getEntry("pages", "home");
+if (!page || page.data.template !== "home") throw new Error("Home content not found");
+const heroContent = page.data.hero;
 ---
 
 <section class="mt-6 overflow-hidden rounded-[3px] bg-slate-950 text-white">

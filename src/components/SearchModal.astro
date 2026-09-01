@@ -1,8 +1,20 @@
 ---
 import { Image } from "astro:assets";
-import { categories } from "../data/categories";
-import { products } from "../data/products";
-import { categoryProductCounts } from "../data/search";
+import { getCollection } from "astro:content";
+import { getCategoryProductCounts } from "../data/search";
+
+const [productEntries, categoryEntries] = await Promise.all([
+  getCollection("products"),
+  getCollection("categories"),
+]);
+const products = productEntries.map((entry) => ({
+  slug: entry.id,
+  ...entry.data,
+}));
+const categories = categoryEntries
+  .map((entry) => ({ slug: entry.id, ...entry.data }))
+  .sort((a, b) => a.order - b.order);
+const categoryProductCounts = getCategoryProductCounts(categories, products);
 ---
 
 <dialog

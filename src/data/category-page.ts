@@ -1,18 +1,12 @@
-import assets from "../assets";
-import type { CategoryPageItem } from "../types/category";
-import { categories } from "./categories";
-import { products } from "./products";
+import type { CategoryContent, CategoryPageItem } from "../types/category";
+import type { Product } from "../types/product";
 
-const categoryImages = {
-  laptops: assets.laptop1,
-  desktops: assets.desktop1,
-  monitors: assets.monitor1,
-  components: assets.component1,
-};
-
-export const categoryItems: CategoryPageItem[] = categories.map((category) => ({
-  ...category,
-  image: categoryImages[category.slug as keyof typeof categoryImages],
-  itemCount: products.filter((product) => product.category === category.slug)
-    .length,
-}));
+export const createCategoryItems = (
+  categories: CategoryContent[],
+  products: Product[],
+): CategoryPageItem[] =>
+  categories.map((category) => ({
+    ...category,
+    itemCount: products.filter((product) => product.category === category.slug)
+      .length,
+  }));

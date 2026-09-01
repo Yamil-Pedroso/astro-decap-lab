@@ -1,9 +1,22 @@
 ---
-import { serviceBenefits } from "../data/service-benefits";
+import { getCollection, getEntry } from "astro:content";
+import { benefitIconPaths } from "../data/service-benefits";
+
+const [entries, page] = await Promise.all([
+  getCollection("benefits"),
+  getEntry("pages", "home"),
+]);
+if (!page || page.data.template !== "home") throw new Error("Home content not found");
+const serviceBenefits = entries
+  .map((entry) => ({
+    ...entry.data,
+    paths: benefitIconPaths[entry.id] ?? [],
+  }))
+  .sort((a, b) => a.order - b.order);
 ---
 
 <section class="mt-6" aria-labelledby="service-benefits-title">
-  <h2 id="service-benefits-title" class="sr-only">Shopping benefits</h2>
+  <h2 id="service-benefits-title" class="sr-only">{page.data.benefitsTitle}</h2>
 
   <div class="flex snap-x snap-mandatory gap-3 overflow-x-auto">
     {
