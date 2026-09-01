@@ -1,8 +1,11 @@
 local_backend: true
 
 backend:
-  name: git-gateway
+  name: github
+  repo: Yamil-Pedroso/astro-decap-lab
   branch: main
+  base_url: https://reboot-lab-oauth-2.yamirovinci.workers.dev
+  auth_endpoint: auth
 
 media_folder: "src/assets/images/uploads"
 public_folder: "../../assets/images/uploads"
@@ -14,7 +17,6 @@ collections:
     create: true
     extension: "md"
     format: "frontmatter"
-
     slug: "{{slug}}"
 
     fields:
@@ -24,7 +26,11 @@ collections:
 
       - label: "Category"
         name: "category"
-        widget: "string"
+        widget: "relation"
+        collection: "categories"
+        search_fields: ["name"]
+        value_field: "{{slug}}"
+        display_fields: ["name"]
 
       - label: "Price"
         name: "price"
@@ -64,3 +70,459 @@ collections:
         name: "order"
         widget: "number"
         value_type: "int"
+
+  - name: "promotions"
+    label: "Promotions"
+    folder: "src/content/promotions"
+    create: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    identifier_field: "slot"
+
+    fields:
+      - label: "Slot"
+        name: "slot"
+        widget: "select"
+        options:
+          - "laptop"
+          - "desktop"
+          - "monitor"
+          - "component"
+
+      - label: "Category"
+        name: "category"
+        widget: "relation"
+        collection: "categories"
+        search_fields: ["name"]
+        value_field: "{{slug}}"
+        display_fields: ["name"]
+
+      - label: "Product"
+        name: "product"
+        widget: "relation"
+        collection: "products"
+        search_fields: ["name"]
+        value_field: "{{slug}}"
+        display_fields: ["name"]
+        required: false
+
+      - label: "Eyebrow"
+        name: "eyebrow"
+        widget: "string"
+        required: false
+
+      - label: "Title"
+        name: "title"
+        widget: "string"
+        required: false
+
+      - label: "Description"
+        name: "description"
+        widget: "text"
+
+      - label: "CTA"
+        name: "cta"
+        widget: "string"
+
+      - label: "Show Product Price"
+        name: "showProductPrice"
+        widget: "boolean"
+        required: false
+        default: false
+
+      - label: "Image"
+        name: "image"
+        widget: "string"
+
+      - label: "Order"
+        name: "order"
+        widget: "number"
+        value_type: "int"
+
+  - name: "benefits"
+    label: "Benefits"
+    folder: "src/content/benefits"
+    create: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    identifier_field: "title"
+
+    fields:
+      - label: "Title"
+        name: "title"
+        widget: "string"
+
+      - label: "Description"
+        name: "description"
+        widget: "text"
+
+      - label: "Link"
+        name: "href"
+        widget: "string"
+
+      - label: "Order"
+        name: "order"
+        widget: "number"
+        value_type: "int"
+
+  - name: "pages"
+    label: "Pages"
+    files:
+
+      # =========================
+      # HOME
+      # =========================
+      - name: "home"
+        label: "Home"
+        file: "src/content/pages/home.md"
+        fields:
+          - { label: "Template", name: "template", widget: "hidden", default: "home" }
+
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "Image", name: "image", widget: "string" }
+              - { label: "Image Alt", name: "imageAlt", widget: "string" }
+
+              - label: "Primary Action"
+                name: "primaryAction"
+                widget: "object"
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "Link", name: "href", widget: "string" }
+
+              - label: "Secondary Action"
+                name: "secondaryAction"
+                widget: "object"
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "Link", name: "href", widget: "string" }
+
+          - { label: "Category Strip Title", name: "categoryStripTitle", widget: "string" }
+          - { label: "Promotions Title", name: "promotionsTitle", widget: "string" }
+
+          - label: "Showcase"
+            name: "showcase"
+            widget: "object"
+            fields:
+              - { label: "ARIA Label", name: "ariaLabel", widget: "string" }
+              - { label: "Collections Eyebrow", name: "collectionsEyebrow", widget: "string" }
+              - { label: "Collections Title", name: "collectionsTitle", widget: "string" }
+              - { label: "Collections View All", name: "collectionsViewAll", widget: "string" }
+              - { label: "Collection CTA", name: "collectionCta", widget: "string" }
+
+              - { label: "Deals Eyebrow", name: "dealsEyebrow", widget: "string" }
+              - { label: "Deals Title", name: "dealsTitle", widget: "string" }
+              - { label: "Deals View All", name: "dealsViewAll", widget: "string" }
+
+              - label: "Countdown"
+                name: "countdown"
+                widget: "object"
+                fields:
+                  - { label: "Days", name: "days", widget: "string" }
+                  - { label: "Hours", name: "hours", widget: "string" }
+                  - { label: "Minutes", name: "minutes", widget: "string" }
+
+              - { label: "Arrivals Eyebrow", name: "arrivalsEyebrow", widget: "string" }
+              - { label: "Arrivals Title", name: "arrivalsTitle", widget: "string" }
+              - { label: "Arrivals View All", name: "arrivalsViewAll", widget: "string" }
+
+              - { label: "Featured Badge", name: "featuredBadge", widget: "string" }
+              - { label: "Featured Description", name: "featuredDescription", widget: "text" }
+              - { label: "Featured CTA", name: "featuredCta", widget: "string" }
+              - { label: "New Badge", name: "newBadge", widget: "string" }
+
+              - label: "Featured Product"
+                name: "featuredProduct"
+                widget: "relation"
+                collection: "products"
+                search_fields: ["name"]
+                value_field: "{{slug}}"
+                display_fields: ["name"]
+
+              - label: "Flash Deals"
+                name: "flashDeals"
+                widget: "list"
+                fields:
+                  - label: "Product"
+                    name: "product"
+                    widget: "relation"
+                    collection: "products"
+                    search_fields: ["name"]
+                    value_field: "{{slug}}"
+                    display_fields: ["name"]
+
+                  - label: "Discount"
+                    name: "discount"
+                    widget: "number"
+                    value_type: "int"
+
+              - label: "New Arrivals"
+                name: "newArrivals"
+                widget: "list"
+                field:
+                  label: "Product"
+                  name: "product"
+                  widget: "relation"
+                  collection: "products"
+                  search_fields: ["name"]
+                  value_field: "{{slug}}"
+                  display_fields: ["name"]
+
+          - label: "Best Sellers"
+            name: "bestSellers"
+            widget: "object"
+            fields:
+              - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "View All", name: "viewAll", widget: "string" }
+              - { label: "Badge", name: "badge", widget: "string" }
+
+              - label: "Products"
+                name: "products"
+                widget: "list"
+                field:
+                  label: "Product"
+                  name: "product"
+                  widget: "relation"
+                  collection: "products"
+                  search_fields: ["name"]
+                  value_field: "{{slug}}"
+                  display_fields: ["name"]
+
+          - { label: "Benefits Title", name: "benefitsTitle", widget: "string" }
+
+          - label: "Categories Section"
+            name: "categoriesSection"
+            widget: "object"
+            fields:
+              - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+
+
+      # =========================
+      # ABOUT
+      # =========================
+      - name: "about"
+        label: "About"
+        file: "src/content/pages/about.md"
+        fields:
+          - { label: "Template", name: "template", widget: "hidden", default: "about" }
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - { label: "Image", name: "image", widget: "string" }
+          - { label: "Image Alt", name: "imageAlt", widget: "string" }
+
+          - { label: "Idea Eyebrow", name: "ideaEyebrow", widget: "string" }
+          - { label: "Idea Title", name: "ideaTitle", widget: "string" }
+
+          - label: "Idea Paragraphs"
+            name: "ideaParagraphs"
+            widget: "list"
+            field:
+              label: "Paragraph"
+              name: "paragraph"
+              widget: "text"
+
+          - label: "Stats"
+            name: "stats"
+            widget: "list"
+            fields:
+              - { label: "Value", name: "value", widget: "string" }
+              - { label: "Label", name: "label", widget: "string" }
+
+          - { label: "Principles Eyebrow", name: "principlesEyebrow", widget: "string" }
+          - { label: "Principles Title", name: "principlesTitle", widget: "string" }
+
+          - label: "Principles"
+            name: "principles"
+            widget: "list"
+            fields:
+              - { label: "Number", name: "number", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+
+
+      # =========================
+      # CATEGORIES
+      # =========================
+      - name: "categories"
+        label: "Categories Page"
+        file: "src/content/pages/categories.md"
+        fields:
+          - { label: "Template", name: "template", widget: "hidden", default: "about" }
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - { label: "Image", name: "image", widget: "string" }
+          - { label: "Image Alt", name: "imageAlt", widget: "string" }
+
+          - { label: "Idea Eyebrow", name: "ideaEyebrow", widget: "string" }
+          - { label: "Idea Title", name: "ideaTitle", widget: "string" }
+
+          - label: "Idea Paragraphs"
+            name: "ideaParagraphs"
+            widget: "list"
+            field:
+              label: "Paragraph"
+              name: "paragraph"
+              widget: "text"
+
+          - label: "Stats"
+            name: "stats"
+            widget: "list"
+            fields:
+              - { label: "Value", name: "value", widget: "string" }
+              - { label: "Label", name: "label", widget: "string" }
+
+          - { label: "Principles Eyebrow", name: "principlesEyebrow", widget: "string" }
+          - { label: "Principles Title", name: "principlesTitle", widget: "string" }
+
+          - label: "Principles"
+            name: "principles"
+            widget: "list"
+            fields:
+              - { label: "Number", name: "number", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+
+
+      # =========================
+      # CONTACT
+      # =========================
+      - name: "contact"
+        label: "Contact"
+        file: "src/content/pages/contact.md"
+        fields:
+          - { label: "Template", name: "template", widget: "hidden", default: "contact" }
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: "Response Time", name: "responseTime", widget: "string" }
+          - { label: "Form Eyebrow", name: "formEyebrow", widget: "string" }
+          - { label: "Form Title", name: "formTitle", widget: "string" }
+
+
+      # =========================
+      # PRIVACY
+      # =========================
+      - name: "privacy"
+        label: "Privacy"
+        file: "src/content/pages/privacy.md"
+        fields:
+          - { label: "Template", name: "template", widget: "hidden", default: "privacy" }
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - { label: "Updated", name: "updated", widget: "string" }
+
+          - label: "Sections"
+            name: "sections"
+            widget: "list"
+            fields:
+              - { label: "Number", name: "number", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Text", name: "text", widget: "text" }
+
+          - { label: "CTA Eyebrow", name: "ctaEyebrow", widget: "string" }
+          - { label: "CTA Title", name: "ctaTitle", widget: "string" }
+
+          - label: "Action"
+            name: "action"
+            widget: "object"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "Link", name: "href", widget: "string" }
+
+
+      # =========================
+      # PRODUCTS
+      # =========================
+      - name: "products"
+        label: "Products Page"
+        file: "src/content/pages/products.md"
+        fields:
+          - { label: "Template", name: "template", widget: "hidden", default: "products" }
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - { label: "Summary", name: "summary", widget: "text" }
+          - { label: "Inventory Eyebrow", name: "inventoryEyebrow", widget: "string" }
+          - { label: "Inventory Title", name: "inventoryTitle", widget: "string" }
+          - { label: "Categories CTA", name: "categoriesCta", widget: "string" }
+
+
+      # =========================
+      # SHIPPING
+      # =========================
+      - name: "shipping"
+        label: "Shipping"
+        file: "src/content/pages/shipping.md"
+        fields:
+          - { label: "Template", name: "template", widget: "hidden", default: "shipping" }
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+
+          - label: "Shipping Options"
+            name: "options"
+            widget: "list"
+            fields:
+              - { label: "Number", name: "number", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Time", name: "time", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+
+          - { label: "Journey Eyebrow", name: "journeyEyebrow", widget: "string" }
+          - { label: "Journey Title", name: "journeyTitle", widget: "string" }
+          - { label: "Journey Description", name: "journeyDescription", widget: "text" }
+
+          - label: "Action"
+            name: "action"
+            widget: "object"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "Link", name: "href", widget: "string" }
+
+
+      # =========================
+      # WARRANTY
+      # =========================
+      - name: "warranty"
+        label: "Warranty"
+        file: "src/content/pages/warranty.md"
+        fields:
+          - { label: "Template", name: "template", widget: "hidden", default: "warranty" }
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - { label: "Coverage Months", name: "coverageMonths", widget: "string" }
+          - { label: "Coverage Label", name: "coverageLabel", widget: "string" }
+          - { label: "Process Eyebrow", name: "processEyebrow", widget: "string" }
+          - { label: "Process Title", name: "processTitle", widget: "string" }
+
+          - label: "Process Action"
+            name: "processAction"
+            widget: "object"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "Link", name: "href", widget: "string" }
+
+          - label: "Steps"
+            name: "steps"
+            widget: "list"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+
+          - { label: "Notes Title", name: "notesTitle", widget: "string" }
+          - { label: "Notes", name: "notes", widget: "text" }
