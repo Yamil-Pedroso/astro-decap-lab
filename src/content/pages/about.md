@@ -1,7 +1,7 @@
 ---
 template: about
 eyebrow: About Reboot Lab
-title: Good hardware deserves another cycle :).
+title: Good hardware deserves another cycle.
 description: Reboot Lab is a fictional refurbished technology shop and an
   architecture laboratory for learning how modern, content-driven web projects
   are designed, built and deployed.
