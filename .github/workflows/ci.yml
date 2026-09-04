@@ -29,6 +29,8 @@ jobs:
 
       - name: Build Astro
         run: npm run build
+        env:
+          DEPLOY_TARGET: github-pages
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
