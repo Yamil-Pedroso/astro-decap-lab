@@ -2,14 +2,12 @@
 import { Image } from "astro:assets";
 import assets from "../assets";
 import { headerNavigation } from "../data/navigation";
+import { withBasePath } from "../utils/paths";
 import CartDrawer from "./CartDrawer.astro";
 import CheckoutModal from "./CheckoutModal.astro";
 import SearchModal from "./SearchModal.astro";
 
 const pathname = Astro.url.pathname;
-const baseUrl = import.meta.env.BASE_URL.endsWith("/")
-	? import.meta.env.BASE_URL
-	: `${import.meta.env.BASE_URL}/`;
 const isActive = ({ activePaths, exactPaths = [] }: (typeof headerNavigation)[number]) =>
 	exactPaths.includes(pathname) || activePaths.some((path) => pathname.startsWith(path));
 ---
@@ -18,7 +16,7 @@ const isActive = ({ activePaths, exactPaths = [] }: (typeof headerNavigation)[nu
 	<div
 	class="mx-auto flex w-full max-w-[1600px] items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
 >
-		<a href={baseUrl} aria-label="Reboot Lab home" class="shrink-0">
+		<a href={withBasePath("/")} aria-label="Reboot Lab home" class="shrink-0">
 			<Image
 				src={assets.brandLogo}
 				alt="Reboot Lab"
@@ -32,7 +30,7 @@ const isActive = ({ activePaths, exactPaths = [] }: (typeof headerNavigation)[nu
 
 				return (
 					<a
-						href={`${baseUrl}${item.href.replace(/^\//, "")}`}
+						href={withBasePath(item.href)}
 						class:list={[
 							"transition hover:text-violet-600",
 							active && "text-violet-600",

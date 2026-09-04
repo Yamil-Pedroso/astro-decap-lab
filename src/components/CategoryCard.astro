@@ -1,5 +1,6 @@
 ---
 import type { CategoryCardProps } from "../types/category";
+import { withBasePath } from "../utils/paths";
 
 type Props = CategoryCardProps;
 
@@ -7,7 +8,7 @@ const { name, slug, description } = Astro.props;
 ---
 
 <a
-  href={`/categories/${slug}`}
+  href={withBasePath(`/categories/${slug}`)}
   class="group relative overflow-hidden border border-slate-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-violet-400"
 >
   <div class="mb-10 flex items-center justify-between">

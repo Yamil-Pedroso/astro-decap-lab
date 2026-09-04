@@ -1,5 +1,6 @@
 ---
 import { getEntry } from "astro:content";
+import { withBasePath } from "../utils/paths";
 
 const page = await getEntry("pages", "shipping");
 if (!page || page.data.template !== "shipping") throw new Error("Shipping content not found");
@@ -31,7 +32,7 @@ const content = page.data;
       <p class="mt-4 max-w-2xl leading-7 text-violet-100">{content.journeyDescription}</p>
     </div>
     <div class="flex items-center border-t border-white/15 p-7 lg:border-l lg:border-t-0 lg:p-10">
-      <a href={content.action.href} class="flex w-full items-center justify-between rounded-xl bg-white px-5 py-4 text-sm font-semibold text-violet-700">{content.action.label} <span>→</span></a>
+      <a href={withBasePath(content.action.href)} class="flex w-full items-center justify-between rounded-xl bg-white px-5 py-4 text-sm font-semibold text-violet-700">{content.action.label} <span>→</span></a>
     </div>
   </div>
 </section>

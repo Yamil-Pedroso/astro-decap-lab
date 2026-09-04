@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 import { createCategoryIconItems } from "../data/category-icons";
+import { withBasePath } from "../utils/paths";
 
 const [productEntries, categoryEntries, page] = await Promise.all([
   getCollection("products"),
@@ -25,7 +26,7 @@ const categoryIconItems = createCategoryIconItems(categories, products);
     {
         categoryIconItems.map((category) => (
         <a
-          href={`/categories/${category.slug}`}
+          href={withBasePath(`/categories/${category.slug}`)}
           class="group flex min-w-36 flex-1 snap-start flex-col items-center px-5 py-6 text-center transition duration-300 hover:bg-violet-50/70 focus-visible:bg-violet-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-violet-500"
         >
           <span class="flex size-14 items-center justify-center rounded-full bg-slate-50 text-slate-800 transition duration-300 group-hover:bg-violet-600 group-hover:text-white">

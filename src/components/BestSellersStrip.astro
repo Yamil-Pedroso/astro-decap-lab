@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection, getEntry } from "astro:content";
+import { withBasePath } from "../utils/paths";
 
 const [entries, page] = await Promise.all([
   getCollection("products"),
@@ -34,7 +35,7 @@ const bestSellers = content.products.flatMap((slug) => {
     </div>
 
     <a
-      href="/products"
+      href={withBasePath("/products")}
       class="text-xs font-semibold text-slate-500 transition hover:text-violet-600"
     >
       {content.viewAll}
@@ -63,7 +64,7 @@ const bestSellers = content.products.flatMap((slug) => {
 
           <div class="flex gap-3">
             <a
-              href={`/products/${product.slug}`}
+              href={withBasePath(`/products/${product.slug}`)}
               class="size-18 shrink-0 overflow-hidden rounded-lg bg-white/5"
             >
               <Image
@@ -78,7 +79,7 @@ const bestSellers = content.products.flatMap((slug) => {
                 {product.category}
               </p>
               <a
-                href={`/products/${product.slug}`}
+                href={withBasePath(`/products/${product.slug}`)}
                 class="mt-1 line-clamp-2 block min-h-8 text-xs font-semibold leading-4 text-white transition hover:text-violet-300"
               >
                 {product.name}
@@ -101,7 +102,7 @@ const bestSellers = content.products.flatMap((slug) => {
           </div>
 
           <a
-            href="/cart"
+            href={withBasePath("/cart")}
             aria-label={`Add ${product.name} to cart`}
             class="absolute bottom-4 right-4 flex size-7 items-center justify-center rounded-md bg-violet-600 text-sm font-bold text-white transition hover:bg-violet-500"
           >

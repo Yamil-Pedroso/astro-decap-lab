@@ -1,5 +1,6 @@
 ---
 import { footerNavigation } from "../data/navigation";
+import { withBasePath } from "../utils/paths";
 ---
 
 <footer class="mt-24 bg-[#0a0a0c] text-white">
@@ -38,7 +39,7 @@ import { footerNavigation } from "../data/navigation";
             <ul class="space-y-3 text-sm text-slate-300">
               {group.links.map((link) => (
                 <li>
-                  <a class="transition hover:text-violet-400" href={link.href}>
+                  <a class="transition hover:text-violet-400" href={withBasePath(link.href)}>
                     {link.label}
                   </a>
                 </li>

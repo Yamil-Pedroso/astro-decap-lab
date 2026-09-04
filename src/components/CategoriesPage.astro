@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import { getCollection, getEntry } from "astro:content";
 import { createCategoryItems } from "../data/category-page";
+import { withBasePath } from "../utils/paths";
 
 const [productEntries, categoryEntries, page] = await Promise.all([
   getCollection("products"),
@@ -69,7 +70,7 @@ const content = page.data;
     {
       categoryItems.map((category, index) => (
         <a
-          href={`/categories/${category.slug}`}
+          href={withBasePath(`/categories/${category.slug}`)}
           class="group relative min-h-80 overflow-hidden rounded-2xl bg-slate-950 text-white"
         >
           <Image

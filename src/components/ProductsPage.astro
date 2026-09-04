@@ -1,5 +1,6 @@
 ---
 import { getCollection, getEntry } from "astro:content";
+import { withBasePath } from "../utils/paths";
 import ProductCard from "./ProductCard.astro";
 
 const [productEntries, categoryEntries, page] = await Promise.all([
@@ -44,7 +45,7 @@ const content = page.data;
       <p class="text-xs font-semibold uppercase tracking-[0.2em] text-violet-600">{content.inventoryEyebrow}</p>
       <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-950">{content.inventoryTitle}</h2>
     </div>
-    <a href="/categories" class="text-sm font-semibold text-violet-600 hover:text-violet-800">{content.categoriesCta}</a>
+    <a href={withBasePath("/categories")} class="text-sm font-semibold text-violet-600 hover:text-violet-800">{content.categoriesCta}</a>
   </div>
 
   <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">

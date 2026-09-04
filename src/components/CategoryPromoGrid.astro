@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection, getEntry } from "astro:content";
+import { withBasePath } from "../utils/paths";
 
 const [promotionEntries, productEntries, page] = await Promise.all([
   getCollection("promotions"),
@@ -34,7 +35,7 @@ if (!laptopPromo || !desktopPromo || !monitorPromo || !componentPromo) {
     class="grid gap-4 md:grid-cols-2 lg:grid-cols-[1.05fr_0.8fr_1.35fr]"
   >
     <a
-      href={`/categories/${laptopPromo.slug}`}
+      href={withBasePath(`/categories/${laptopPromo.slug}`)}
       class="group relative min-h-80 overflow-hidden rounded-2xl bg-[#08080b] p-7 text-white"
     >
       <Image
@@ -67,7 +68,7 @@ if (!laptopPromo || !desktopPromo || !monitorPromo || !componentPromo) {
     </a>
 
     <a
-      href={`/categories/${desktopPromo.slug}`}
+      href={withBasePath(`/categories/${desktopPromo.slug}`)}
       class="group relative min-h-80 overflow-hidden rounded-2xl bg-violet-700 p-7 text-white"
     >
       <Image
@@ -100,7 +101,7 @@ if (!laptopPromo || !desktopPromo || !monitorPromo || !componentPromo) {
 
     <div class="grid gap-4 md:col-span-2 lg:col-span-1">
       <a
-        href={`/categories/${monitorPromo.slug}`}
+        href={withBasePath(`/categories/${monitorPromo.slug}`)}
         class="group relative min-h-38 overflow-hidden rounded-2xl bg-[#dceaff] p-6 text-slate-950"
       >
         <Image
@@ -129,7 +130,7 @@ if (!laptopPromo || !desktopPromo || !monitorPromo || !componentPromo) {
       </a>
 
       <a
-        href={`/categories/${componentPromo.slug}`}
+        href={withBasePath(`/categories/${componentPromo.slug}`)}
         class="group relative min-h-38 overflow-hidden rounded-2xl bg-[#e8f2b8] p-6 text-slate-950"
       >
         <Image

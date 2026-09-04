@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { ProductCardProps } from "../types/product";
+import { withBasePath } from "../utils/paths";
 
 type Props = ProductCardProps;
 
@@ -8,7 +9,7 @@ const { product } = Astro.props;
 ---
 
 <a
-  href={`/products/${product.slug}`}
+  href={withBasePath(`/products/${product.slug}`)}
   class="group block overflow-hidden border border-slate-200 bg-white transition duration-300 hover:-translate-y-1 hover:border-violet-400"
 >
   <div class="relative aspect-[4/3] overflow-hidden bg-slate-100">

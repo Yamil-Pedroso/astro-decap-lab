@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 import { benefitIconPaths } from "../data/service-benefits";
+import { withBasePath } from "../utils/paths";
 
 const [entries, page] = await Promise.all([
   getCollection("benefits"),
@@ -43,7 +44,7 @@ const serviceBenefits = entries
               {benefit.description}
             </p>
             <a
-              href={benefit.href}
+              href={withBasePath(benefit.href)}
               class="mt-1.5 inline-flex text-[10px] font-semibold text-violet-600 transition hover:text-violet-800"
             >
               Learn more →

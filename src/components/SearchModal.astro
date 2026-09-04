@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import { getCategoryProductCounts } from "../data/search";
+import { withBasePath } from "../utils/paths";
 
 const [productEntries, categoryEntries] = await Promise.all([
   getCollection("products"),
@@ -58,7 +59,7 @@ const categoryProductCounts = getCategoryProductCounts(categories, products);
         {
           products.map((product) => (
             <a
-              href={`/products/${product.slug}`}
+              href={withBasePath(`/products/${product.slug}`)}
               data-search-item
               data-search-value={`${product.name} ${product.category} ${product.description} ${product.price} CHF available refurbished`}
               class="group grid grid-cols-[72px_1fr_auto] items-center gap-4 rounded-xl border border-transparent p-2 transition hover:border-violet-200 hover:bg-violet-50"
@@ -82,7 +83,7 @@ const categoryProductCounts = getCategoryProductCounts(categories, products);
         {
           categories.map((category) => (
             <a
-              href={`/categories/${category.slug}`}
+              href={withBasePath(`/categories/${category.slug}`)}
               data-search-item
               data-search-value={`${category.name} ${category.slug} ${category.description} category`}
               class="group flex items-center justify-between gap-5 rounded-xl border border-slate-200 p-4 transition hover:border-violet-300 hover:bg-violet-50"

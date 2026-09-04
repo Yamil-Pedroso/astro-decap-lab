@@ -1,5 +1,6 @@
 ---
 import { getEntry } from "astro:content";
+import { withBasePath } from "../utils/paths";
 
 const page = await getEntry("pages", "warranty");
 if (!page || page.data.template !== "warranty") throw new Error("Warranty content not found");
@@ -23,7 +24,7 @@ const content = page.data;
     <div>
       <p class="text-xs font-semibold uppercase tracking-[0.2em] text-violet-600">{content.processEyebrow}</p>
       <h2 class="mt-3 text-4xl font-bold tracking-tight text-slate-950">{content.processTitle}</h2>
-      <a href={content.processAction.href} class="mt-7 inline-flex rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white">{content.processAction.label} →</a>
+      <a href={withBasePath(content.processAction.href)} class="mt-7 inline-flex rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white">{content.processAction.label} →</a>
     </div>
     <div class="space-y-3">
       {content.steps.map((step, index) => (
