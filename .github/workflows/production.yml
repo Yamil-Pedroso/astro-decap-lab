@@ -1,22 +1,24 @@
 name: Production Deploy
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Update production code
+      - name: Inspect VPS path
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /root/var/www/astro-decap-lab
+            whoami
+            pwd
+            ls -la /var/www
+            ls -la /var/www/astro-decap-lab
+            cd /var/www/astro-decap-lab
+            pwd
             git status
-            git pull origin main
