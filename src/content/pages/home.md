@@ -2,7 +2,7 @@
 template: home
 hero:
   eyebrow: Refurbished technology
-  title: Technology deserves a second life and a third :).
+  title: Technology deserves a second life.
   description: Discover reliable refurbished computers, components and accessories
     for a smarter and more sustainable way to use technology.
   image: ../../assets/images/hero/hero1.webp
