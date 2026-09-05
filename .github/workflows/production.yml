@@ -1,7 +1,9 @@
 name: Production Deploy
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -29,5 +31,9 @@ jobs:
               --restart unless-stopped \
               -p 127.0.0.1:8082:80 \
               reboot-lab
+
+            sleep 3
+
+            curl --fail http://127.0.0.1:8082 || exit 1
 
             docker ps
