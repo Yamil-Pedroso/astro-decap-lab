@@ -8,17 +8,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Inspect VPS path
+      - name: Update production code
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            whoami
-            pwd
-            ls -la /var/www
-            ls -la /var/www/astro-decap-lab
             cd /var/www/astro-decap-lab
-            pwd
             git status
+            git pull origin main
