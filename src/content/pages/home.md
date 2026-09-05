@@ -2,8 +2,9 @@
 template: home
 hero:
   eyebrow: Refurbished technology
-  title: Technology deserves a second life.
-  description: Discover reliable refurbished computers, components and accessories for a smarter and more sustainable way to use technology.
+  title: Technology deserves a second life and a third :).
+  description: Discover reliable refurbished computers, components and accessories
+    for a smarter and more sustainable way to use technology.
   image: ../../assets/images/hero/hero1.webp
   imageAlt: Refurbished laptop illuminated with purple light
   primaryAction:
@@ -15,26 +16,25 @@ hero:
 categoryStripTitle: Product categories
 promotionsTitle: Featured categories
 showcase:
-  ariaLabel: Product highlights
-  collectionsEyebrow: Browse the lab
-  collectionsTitle: Featured collections
-  collectionsViewAll: View all →
-  collectionCta: Explore now →
+  featuredProduct: thinkpad-t480
   dealsEyebrow: Limited offers
+  featuredCta: Explore now →
+  arrivalsViewAll: View all →
+  collectionsTitle: Featured collections
+  newBadge: New
+  collectionsViewAll: View all →
+  ariaLabel: Product highlights
+  featuredDescription: Adapted, tested and ready for another productive cycle.
+  arrivalsEyebrow: Freshly tested
   dealsTitle: Flash deals
-  dealsViewAll: View all deals →
   countdown:
     days: "07"
     hours: "45"
     minutes: "32"
-  arrivalsEyebrow: Freshly tested
-  arrivalsTitle: New arrivals
-  arrivalsViewAll: View all →
+  collectionCta: Explore now →
+  collectionsEyebrow: Browse the lab
   featuredBadge: Just arrived
-  featuredDescription: Adapted, tested and ready for another productive cycle.
-  featuredCta: Explore now →
-  newBadge: New
-  featuredProduct: thinkpad-t480
+  dealsViewAll: View all deals →
   flashDeals:
     - product: thinkpad-t480
       discount: 20
@@ -53,6 +53,7 @@ showcase:
     - dell-ultrasharp-u2419h
     - kingston-ddr4-16gb
     - thinkpad-t480
+  arrivalsTitle: New arrivals
 bestSellers:
   eyebrow: Most wanted
   title: Best sellers
@@ -68,5 +69,6 @@ benefitsTitle: Shopping benefits
 categoriesSection:
   eyebrow: Browse hardware
   title: Shop by category
-  description: Explore refurbished hardware selected for reliability, reuse and long-term value.
+  description: Explore refurbished hardware selected for reliability, reuse and
+    long-term value.
 ---
