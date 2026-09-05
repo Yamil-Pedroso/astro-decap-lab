@@ -1,0 +1,109 @@
+<dialog
+  id="welcome-notice"
+  aria-labelledby="welcome-notice-title"
+  aria-describedby="welcome-notice-description"
+  class="fixed inset-0 m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-lg overflow-y-auto rounded-2xl border border-white/10 bg-[#08080f] p-0 text-white shadow-2xl"
+>
+  <div class="relative overflow-hidden p-7 sm:p-10">
+    <div aria-hidden="true" class="pointer-events-none absolute -right-16 -top-20 size-56 rounded-full bg-violet-600/15 blur-3xl"></div>
+
+    <button
+      type="button"
+      data-notice-close
+      aria-label="Close announcement"
+      class="absolute right-4 top-4 flex size-11 items-center justify-center rounded-full border border-white/15 text-slate-400 transition hover:border-violet-400 hover:bg-white/5 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-400"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" class="size-5">
+        <path d="m6 6 12 12M18 6 6 18"></path>
+      </svg>
+    </button>
+
+    <div class="mb-7 flex size-14 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-violet-400" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="size-7">
+        <path d="m8 8-4 4 4 4m8-8 4 4-4 4m-3-11-2 14"></path>
+      </svg>
+    </div>
+
+    <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-violet-400">Reboot Lab · Work in progress</p>
+    <h2 id="welcome-notice-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">A little more in the making.</h2>
+    <p id="welcome-notice-description" class="mt-5 text-sm leading-7 text-slate-300">
+      Welcome to Reboot Lab! This website is still under development.
+      We’re adding new features, refining the design, and making improvements along the way.
+    </p>
+    <p class="mt-3 text-sm leading-7 text-slate-400">Feel free to explore and check back for updates. Thanks for being here!</p>
+
+    <button
+      type="button"
+      data-notice-close
+      autofocus
+      class="mt-8 flex w-full items-center justify-between rounded-xl bg-violet-600 px-5 py-4 text-sm font-semibold text-white transition hover:bg-violet-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-400"
+    >
+      Explore the lab <span aria-hidden="true">→</span>
+    </button>
+    <p class="mt-4 text-center text-[11px] text-slate-400">Thanks for watching the lab grow.</p>
+  </div>
+</dialog>
+
+<script>
+  const notice = document.querySelector<HTMLDialogElement>("#welcome-notice");
+  const storageKey = "reboot-lab-welcome-dismissed";
+
+  if (notice) {
+    let dismissed = false;
+    try {
+      dismissed = localStorage.getItem(storageKey) === "true";
+    } catch {
+      // The notice still works when browser storage is unavailable.
+    }
+
+    const closeNotice = () => notice.close();
+    notice.querySelectorAll<HTMLButtonElement>("[data-notice-close]").forEach((button) => {
+      button.addEventListener("click", closeNotice);
+    });
+
+    let pointerStartedOutside = false;
+    const isOutside = (event: MouseEvent) => {
+      const bounds = notice.getBoundingClientRect();
+      return event.clientX < bounds.left || event.clientX > bounds.right
+        || event.clientY < bounds.top || event.clientY > bounds.bottom;
+    };
+    notice.addEventListener("pointerdown", (event) => {
+      pointerStartedOutside = event.target === notice && isOutside(event);
+    });
+    notice.addEventListener("click", (event) => {
+      if (pointerStartedOutside && event.target === notice && isOutside(event)) closeNotice();
+      pointerStartedOutside = false;
+    });
+
+    // Also covers the native Escape-key dismissal.
+    notice.addEventListener("close", () => {
+      try {
+        localStorage.setItem(storageKey, "true");
+      } catch {
+        // Closing must never depend on storage permissions.
+      }
+    });
+
+    if (!dismissed) notice.showModal();
+  }
+</script>
+
+<style>
+  #welcome-notice::backdrop {
+    background: rgb(15 23 42 / 70%);
+    backdrop-filter: blur(4px);
+  }
+
+  #welcome-notice[open] {
+    animation: notice-enter 220ms ease-out;
+  }
+
+  @keyframes notice-enter {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #welcome-notice[open] { animation: none; }
+  }
+</style>

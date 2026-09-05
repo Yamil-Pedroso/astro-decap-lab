@@ -4,6 +4,7 @@ import { withBasePath } from "../utils/paths";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import ToastNotifications from "../components/ToastNotifications.astro";
+import WelcomeNotice from "../components/WelcomeNotice.astro";
 
 const { title = "Reboot Lab" } = Astro.props;
 ---
@@ -27,5 +28,6 @@ const { title = "Reboot Lab" } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <WelcomeNotice />
   </body>
 </html>
