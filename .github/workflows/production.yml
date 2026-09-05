@@ -18,4 +18,16 @@ jobs:
             cd /var/www/astro-decap-lab
             git status
             git pull origin main
+
             docker build -t reboot-lab .
+
+            docker stop reboot-lab-web
+            docker rm reboot-lab-web
+
+            docker run -d \
+              --name reboot-lab-web \
+              --restart unless-stopped \
+              -p 127.0.0.1:8082:80 \
+              reboot-lab
+
+            docker ps
