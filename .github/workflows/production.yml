@@ -18,3 +18,4 @@ jobs:
             cd /var/www/astro-decap-lab
             git status
             git pull origin main
+            docker build -t reboot-lab .
