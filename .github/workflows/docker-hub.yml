@@ -32,3 +32,32 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: yamivirtuality/reboot-lab:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy Docker Hub image to VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            docker pull yamivirtuality/reboot-lab:latest
+
+            docker stop reboot-lab-web
+            docker rm reboot-lab-web
+
+            docker run -d \
+              --name reboot-lab-web \
+              --restart unless-stopped \
+              -p 127.0.0.1:8082:80 \
+              yamivirtuality/reboot-lab:latest
+
+            sleep 3
+
+            curl --fail http://127.0.0.1:8082 || exit 1
+
+            docker ps
