@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# reboot lab next steps
+REBOOT_LAB_NEXT_STEPS.md
