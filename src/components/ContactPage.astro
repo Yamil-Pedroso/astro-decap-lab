@@ -3,77 +3,214 @@ import { contactTopics } from "../data/contact";
 import { getEntry } from "astro:content";
 
 const page = await getEntry("pages", "contact");
-if (!page || page.data.template !== "contact") throw new Error("Contact content not found");
+if (!page || page.data.template !== "contact")
+  throw new Error("Contact content not found");
 const content = page.data;
 ---
 
 <section class="py-10 lg:py-16">
-  <div class="grid overflow-hidden rounded-3xl bg-[#08080f] text-white lg:grid-cols-[0.8fr_1.2fr]">
+  <div
+    class="grid overflow-hidden rounded-3xl bg-[#08080f] text-white lg:grid-cols-[0.8fr_1.2fr]"
+  >
     <div class="flex flex-col justify-between p-8 sm:p-12 lg:p-14">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-violet-400">{content.eyebrow}</p>
-        <h1 class="mt-5 text-5xl font-bold tracking-tight sm:text-6xl">{content.title}</h1>
-        <p class="mt-6 max-w-lg text-base leading-7 text-slate-300">{content.description}</p>
+        <p
+          class="text-xs font-semibold uppercase tracking-[0.22em] text-violet-400"
+        >
+          {content.eyebrow}
+        </p>
+        <h1 class="mt-5 text-5xl font-bold tracking-tight sm:text-6xl">
+          {content.title}
+        </h1>
+        <p class="mt-6 max-w-lg text-base leading-7 text-slate-300">
+          {content.description}
+        </p>
       </div>
 
       <div class="mt-12 space-y-5 border-t border-white/10 pt-8 text-sm">
         <div>
-          <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Email</p>
-          <a href={`mailto:${content.email}`} class="mt-1 inline-block font-semibold text-white hover:text-violet-400">{content.email}</a>
+          <p class="text-xs uppercase tracking-[0.18em] text-slate-500">
+            Email
+          </p>
+          <a
+            href={`mailto:${content.email}`}
+            class="mt-1 inline-block font-semibold text-white hover:text-violet-400"
+            >{content.email}</a
+          >
         </div>
         <div>
-          <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Response time</p>
+          <p class="text-xs uppercase tracking-[0.18em] text-slate-500">
+            Response time
+          </p>
           <p class="mt-1 font-semibold">{content.responseTime}</p>
         </div>
       </div>
     </div>
 
     <div class="bg-white p-6 text-slate-950 sm:p-10 lg:p-12">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-violet-600">{content.formEyebrow}</p>
-      <h2 class="mt-2 text-3xl font-bold tracking-tight">{content.formTitle}</h2>
+      <p
+        class="text-xs font-semibold uppercase tracking-[0.2em] text-violet-600"
+      >
+        {content.formEyebrow}
+      </p>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight">
+        {content.formTitle}
+      </h2>
 
       <form data-contact-form class="mt-8 grid gap-5 sm:grid-cols-2">
         <label class="text-xs font-semibold text-slate-600">
           Your name
-          <input required name="name" autocomplete="name" class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-violet-500 focus:ring-3 focus:ring-violet-100" />
+          <input
+            required
+            name="name"
+            autocomplete="name"
+            class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-violet-500 focus:ring-3 focus:ring-violet-100"
+          />
         </label>
         <label class="text-xs font-semibold text-slate-600">
           Email address
-          <input required type="email" name="email" autocomplete="email" class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-violet-500 focus:ring-3 focus:ring-violet-100" />
+          <input
+            required
+            type="email"
+            name="email"
+            autocomplete="email"
+            class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-violet-500 focus:ring-3 focus:ring-violet-100"
+          />
         </label>
         <label class="text-xs font-semibold text-slate-600 sm:col-span-2">
           Topic
-          <select name="topic" class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-violet-500 focus:ring-3 focus:ring-violet-100">
-            {contactTopics.map((topic) => (
-              <option value={topic.value}>{topic.label}</option>
-            ))}
+          <select
+            name="topic"
+            class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-violet-500 focus:ring-3 focus:ring-violet-100"
+          >
+            {
+              contactTopics.map((topic) => (
+                <option value={topic.value}>{topic.label}</option>
+              ))
+            }
           </select>
         </label>
         <label class="text-xs font-semibold text-slate-600 sm:col-span-2">
           Message
-          <textarea required name="message" rows="6" placeholder="Tell us what you need..." class="mt-2 w-full resize-y rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-3 focus:ring-violet-100"></textarea>
+          <textarea
+            required
+            name="message"
+            rows="6"
+            placeholder="Tell us what you need..."
+            class="mt-2 w-full resize-y rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-violet-500 focus:ring-3 focus:ring-violet-100"
+          ></textarea>
         </label>
-        <button type="submit" class="flex items-center justify-between rounded-xl bg-violet-600 px-6 py-4 text-sm font-semibold text-white transition hover:bg-violet-700 sm:col-span-2">
+        <div class="hidden" aria-hidden="true">
+          <label>
+            Website
+            <input
+              type="text"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </label>
+        </div>
+        <button
+          type="submit"
+          class="flex items-center justify-between rounded-xl bg-violet-600 px-6 py-4 text-sm font-semibold text-white transition hover:bg-violet-700 sm:col-span-2"
+        >
           <span>Send message</span><span>→</span>
         </button>
-        <p data-contact-status class="hidden rounded-xl bg-violet-50 p-4 text-sm font-medium text-violet-700 sm:col-span-2" role="status">The form UI is ready. Connect a form endpoint to receive messages.</p>
+        <p
+          data-contact-status
+          class="hidden rounded-xl bg-violet-50 p-4 text-sm font-medium text-violet-700 sm:col-span-2"
+          role="status"
+        >
+          The form UI is ready. Connect a form endpoint to receive messages.
+        </p>
       </form>
     </div>
   </div>
 </section>
 
 <script>
-  const contactForm = document.querySelector<HTMLFormElement>("[data-contact-form]");
-  const contactStatus = document.querySelector<HTMLElement>("[data-contact-status]");
+  const contactForm = document.querySelector<HTMLFormElement>(
+    "[data-contact-form]",
+  );
+  if (!contactForm) {
+    throw new Error("Contact form not found");
+  }
 
-  contactForm?.addEventListener("submit", (event) => {
+  const contactStatus = document.querySelector<HTMLElement>(
+    "[data-contact-status]",
+  );
+
+  contactForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
-    contactStatus?.classList.remove("hidden");
-    window.dispatchEvent(new CustomEvent("reboot:notify", {
-      detail: {
-        type: "info",
-        message: "Form validated. Message delivery is not connected yet.",
-      },
-    }));
+
+    const submitButton = contactForm.querySelector<HTMLButtonElement>(
+      'button[type="submit"]',
+    );
+
+    submitButton?.setAttribute("disabled", "true");
+
+    if (contactStatus) {
+      contactStatus.textContent = "Sending message...";
+      contactStatus.classList.remove("hidden");
+    }
+
+    try {
+      const formData = new FormData(contactForm);
+
+      const payload = {
+        name: formData.get("name"),
+        email: formData.get("email"),
+        topic: formData.get("topic"),
+        message: formData.get("message"),
+        website: formData.get("website"),
+      };
+
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Unable to send message.");
+      }
+
+      if (contactStatus) {
+        contactStatus.textContent = "Message sent successfully.";
+      }
+
+      contactForm.reset();
+
+      window.dispatchEvent(
+        new CustomEvent("reboot:notify", {
+          detail: {
+            type: "success",
+            message: "Message sent successfully.",
+          },
+        }),
+      );
+    } catch (error) {
+      console.error("Contact form error:", error);
+
+      if (contactStatus) {
+        contactStatus.textContent = "Something went wrong. Please try again.";
+      }
+
+      window.dispatchEvent(
+        new CustomEvent("reboot:notify", {
+          detail: {
+            type: "error",
+            message: "Unable to send message.",
+          },
+        }),
+      );
+    } finally {
+      submitButton?.removeAttribute("disabled");
+    }
   });
 </script>
