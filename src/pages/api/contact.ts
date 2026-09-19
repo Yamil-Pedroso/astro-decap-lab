@@ -4,8 +4,6 @@ import { z } from "zod";
 
 export const prerender = false;
 
-const resend = new Resend(import.meta.env.RESEND_API_KEY);
-
 const contactSchema = z.object({
   name: z
     .string()
@@ -62,10 +60,15 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    const contactEmail = import.meta.env.CONTACT_EMAIL;
+    // Read secrets at runtime.
+    // Docker provides these values through --env-file.
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const contactEmail = process.env.CONTACT_EMAIL;
 
-    if (!contactEmail) {
-      console.error("CONTACT_EMAIL is not configured.");
+    if (!resendApiKey || !contactEmail) {
+      console.error(
+        "Contact service environment variables are not configured.",
+      );
 
       return Response.json(
         {
@@ -75,6 +78,10 @@ export const POST: APIRoute = async ({ request }) => {
         { status: 500 },
       );
     }
+
+    // Create the Resend client only after the runtime
+    // environment variables have been validated.
+    const resend = new Resend(resendApiKey);
 
     // 1. Send the contact request to Reboot Lab.
     const { data: adminEmail, error: adminError } = await resend.emails.send({
