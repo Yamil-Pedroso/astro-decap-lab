@@ -47,16 +47,17 @@ jobs:
           script: |
             docker pull yamivirtuality/reboot-lab:latest
 
-            docker stop reboot-lab-web
-            docker rm reboot-lab-web
+            docker stop reboot-lab-web || true
+            docker rm reboot-lab-web || true
 
             docker run -d \
               --name reboot-lab-web \
               --restart unless-stopped \
-              -p 127.0.0.1:8082:80 \
+              --env-file /var/www/astro-decap-lab/.env \
+              -p 127.0.0.1:8082:4321 \
               yamivirtuality/reboot-lab:latest
 
-            sleep 3
+            sleep 5
 
             curl --fail http://127.0.0.1:8082 || exit 1
 
