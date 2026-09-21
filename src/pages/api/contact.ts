@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
 import { z } from "zod";
+import { createDeckCard } from "../../services/deckService";
 
 export const prerender = false;
 
@@ -61,9 +62,11 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Read secrets at runtime.
-    // Docker provides these values through --env-file.
-    const resendApiKey = process.env.RESEND_API_KEY;
-    const contactEmail = process.env.CONTACT_EMAIL;
+    const resendApiKey =
+      process.env.RESEND_API_KEY || import.meta.env.RESEND_API_KEY;
+
+    const contactEmail =
+      process.env.CONTACT_EMAIL || import.meta.env.CONTACT_EMAIL;
 
     if (!resendApiKey || !contactEmail) {
       console.error(
@@ -79,8 +82,6 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Create the Resend client only after the runtime
-    // environment variables have been validated.
     const resend = new Resend(resendApiKey);
 
     // 1. Send the contact request to Reboot Lab.
@@ -137,9 +138,23 @@ Reboot Lab
     });
 
     if (customerError) {
-      // The original contact request was already received,
-      // so don't tell the customer that their form submission failed.
+      // The original request was already received,
+      // so a confirmation failure should not fail the submission.
       console.error("Resend customer confirmation error:", customerError);
+    }
+
+    // 3. Create the corresponding card in Nextcloud Deck.
+    try {
+      await createDeckCard({
+        name,
+        email,
+        topic,
+        message,
+      });
+    } catch (deckError) {
+      // The email has already been received.
+      // Do not tell the customer that the whole submission failed.
+      console.error("Nextcloud Deck card creation error:", deckError);
     }
 
     return Response.json({
