@@ -7,5 +7,5 @@ description: Questions about a product, delivery or warranty? Send us the
 email: hello@rebootlab.ch
 responseTime: Within one business day
 formEyebrow: Send a message please
-formTitle: How can we help :)?
+formTitle: Cómo podemos ayudarte?
 ---
