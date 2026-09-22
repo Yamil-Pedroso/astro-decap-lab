@@ -1,7 +1,9 @@
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
 import { z } from "zod";
+
 import { createDeckCard } from "../../services/deckService";
+
 import {
   contactRouting,
   departmentEmailEnv,
@@ -69,12 +71,9 @@ export const POST: APIRoute = async ({ request }) => {
 
     console.log(`[${requestId}] Contact request received`);
 
-    // Read secrets at runtime.
-    const resendApiKey =
-      process.env.RESEND_API_KEY || import.meta.env.RESEND_API_KEY;
-
-    const contactEmail =
-      process.env.CONTACT_EMAIL || import.meta.env.CONTACT_EMAIL;
+    // Runtime environment variables.
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const contactEmail = process.env.CONTACT_EMAIL;
 
     const route = contactRouting[topic];
 
@@ -92,23 +91,22 @@ export const POST: APIRoute = async ({ request }) => {
 
     const departmentEnvName = departmentEmailEnv[route.department];
 
-    const departmentEmail =
-      process.env[departmentEnvName] || import.meta.env[departmentEnvName];
+    const departmentEmail = process.env[departmentEnvName];
 
     // Admin always receives the request.
-    // The department receives it too when configured.
-    // Set removes duplicates automatically.
+    // Department receives it too when configured.
+    // Set removes duplicate recipients automatically.
     const recipients = [
       ...new Set(
-        [contactEmail, departmentEmail].filter((email): email is string =>
-          Boolean(email),
+        [contactEmail, departmentEmail].filter(
+          (recipient): recipient is string => Boolean(recipient),
         ),
       ),
     ];
 
     if (!resendApiKey || !contactEmail) {
       console.error(
-        "Contact service environment variables are not configured.",
+        `[${requestId}] Contact service environment variables are not configured.`,
       );
 
       return Response.json(
@@ -127,6 +125,7 @@ export const POST: APIRoute = async ({ request }) => {
       from: "Reboot Lab <contact@send.yampe.dev>",
       to: recipients,
       replyTo: email,
+
       subject: `[${requestId}] Reboot Lab contact: ${topic}`,
 
       text: `
@@ -140,11 +139,11 @@ Topic: ${topic}
 
 Message:
 ${message}
-        `.trim(),
+      `.trim(),
     });
 
     if (adminError) {
-      console.error("Resend admin email error:", adminError);
+      console.error(`[${requestId}] Resend admin email error:`, adminError);
 
       return Response.json(
         {
@@ -155,10 +154,16 @@ ${message}
       );
     }
 
-    // 2. Send an automatic confirmation to the customer.
+    console.log(
+      `[${requestId}] Admin email sent. ` +
+        `Resend ID: ${adminEmail?.id ?? "unknown"}`,
+    );
+
+    // 2. Send automatic confirmation to the customer.
     const { error: customerError } = await resend.emails.send({
       from: "Reboot Lab <contact@send.yampe.dev>",
       to: [email],
+
       subject: "We received your message — Reboot Lab",
 
       text: `
@@ -168,39 +173,55 @@ Thanks for contacting Reboot Lab.
 
 We've received your message regarding "${topic}" and will get back to you as soon as possible.
 
+Request-ID: ${requestId}
+
 Your message:
 
 ${message}
 
 Best regards,
 Reboot Lab
-      `.trim(),
+        `.trim(),
     });
 
     if (customerError) {
-      // The original request was already received,
-      // so a confirmation failure should not fail the submission.
-      console.error("Resend customer confirmation error:", customerError);
+      // The original request has already been received.
+      // Confirmation failure must not fail the whole request.
+      console.error(
+        `[${requestId}] Resend customer confirmation error:`,
+        customerError,
+      );
+    } else {
+      console.log(`[${requestId}] Customer confirmation email sent`);
     }
 
     // 3. Create the corresponding card in Nextcloud Deck.
     try {
-      await createDeckCard({
+      const card = await createDeckCard({
         requestId,
         name,
         email,
         topic,
         message,
       });
+
+      console.log(
+        `[${requestId}] Nextcloud Deck card created. ` + `Card ID: ${card.id}`,
+      );
     } catch (deckError) {
-      // The email has already been received.
-      // Do not tell the customer that the whole submission failed.
-      console.error("Nextcloud Deck card creation error:", deckError);
+      // The email has already been delivered.
+      // Deck failure must not make the customer believe
+      // the entire submission failed.
+      console.error(
+        `[${requestId}] Nextcloud Deck card creation error:`,
+        deckError,
+      );
     }
 
     return Response.json({
       success: true,
       message: "Message sent successfully.",
+      requestId,
       id: adminEmail?.id,
     });
   } catch (error) {

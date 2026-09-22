@@ -23,22 +23,22 @@
 
 ## Fase 2 --- Astro → Deck
 
--   [ ] Crear un servicio/módulo de Nextcloud separado de `contact.ts`.
--   [ ] Añadir configuración necesaria al `.env`.
--   [ ] Hacer que `/api/contact` cree una tarjeta.
--   [ ] Título inicial: `Anfrage: {name}`.
--   [ ] Descripción inicial: email + mensaje.
--   [ ] Manejar un fallo de Deck sin perder un email ya enviado.
--   [ ] Probar localmente.
--   [ ] Probar desde Reboot Production.
+-   [x] Crear un servicio/módulo de Nextcloud separado de `contact.ts`.
+-   [x] Añadir configuración necesaria al `.env`.
+-   [x] Hacer que `/api/contact` cree una tarjeta.
+-   [x] Título inicial: `Anfrage: {name}`.
+-   [x] Descripción inicial: email + mensaje.
+-   [x] Manejar un fallo de Deck sin perder un email ya enviado.
+-   [x] Probar localmente.
+-   [x] Probar desde Reboot Production.
 
 ## Fase 3 --- Request-ID
 
--   [ ] Generar un `Request-ID` único por solicitud.
--   [ ] Incluirlo en el email.
--   [ ] Incluirlo en la tarjeta Deck.
--   [ ] Usarlo como relación estable Mail ↔ Deck.
--   [ ] Verificar que una solicitud pueda localizarse en ambos sistemas.
+-   [x] Generar un `Request-ID` único por solicitud.
+-   [x] Incluirlo en el email.
+-   [x] Incluirlo en la tarjeta Deck.
+-   [x] Usarlo como relación estable Mail ↔ Deck.
+-   [x] Verificar que una solicitud pueda localizarse en ambos sistemas.
 
 ## Fase 4 --- Message-ID y Nextcloud Mail
 
