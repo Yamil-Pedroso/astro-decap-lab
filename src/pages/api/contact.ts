@@ -2,6 +2,10 @@ import type { APIRoute } from "astro";
 import { Resend } from "resend";
 import { z } from "zod";
 import { createDeckCard } from "../../services/deckService";
+import {
+  contactRouting,
+  departmentEmailEnv,
+} from "../../config/contactRouting";
 
 export const prerender = false;
 
@@ -61,12 +65,46 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
+    const requestId = `REQ-${crypto.randomUUID()}`;
+
+    console.log(`[${requestId}] Contact request received`);
+
     // Read secrets at runtime.
     const resendApiKey =
       process.env.RESEND_API_KEY || import.meta.env.RESEND_API_KEY;
 
     const contactEmail =
       process.env.CONTACT_EMAIL || import.meta.env.CONTACT_EMAIL;
+
+    const route = contactRouting[topic];
+
+    if (!route) {
+      console.error(`[${requestId}] Unknown contact topic: ${topic}`);
+
+      return Response.json(
+        {
+          success: false,
+          message: "Invalid contact topic.",
+        },
+        { status: 400 },
+      );
+    }
+
+    const departmentEnvName = departmentEmailEnv[route.department];
+
+    const departmentEmail =
+      process.env[departmentEnvName] || import.meta.env[departmentEnvName];
+
+    // Admin always receives the request.
+    // The department receives it too when configured.
+    // Set removes duplicates automatically.
+    const recipients = [
+      ...new Set(
+        [contactEmail, departmentEmail].filter((email): email is string =>
+          Boolean(email),
+        ),
+      ),
+    ];
 
     if (!resendApiKey || !contactEmail) {
       console.error(
@@ -86,13 +124,15 @@ export const POST: APIRoute = async ({ request }) => {
 
     // 1. Send the contact request to Reboot Lab.
     const { data: adminEmail, error: adminError } = await resend.emails.send({
-      from: "Reboot Lab <onboarding@resend.dev>",
-      to: [contactEmail],
+      from: "Reboot Lab <contact@send.yampe.dev>",
+      to: recipients,
       replyTo: email,
-      subject: `Reboot Lab contact: ${topic}`,
+      subject: `[${requestId}] Reboot Lab contact: ${topic}`,
 
       text: `
 New contact message
+
+Request-ID: ${requestId}
 
 Name: ${name}
 Email: ${email}
@@ -117,7 +157,7 @@ ${message}
 
     // 2. Send an automatic confirmation to the customer.
     const { error: customerError } = await resend.emails.send({
-      from: "Reboot Lab <onboarding@resend.dev>",
+      from: "Reboot Lab <contact@send.yampe.dev>",
       to: [email],
       subject: "We received your message — Reboot Lab",
 
@@ -146,6 +186,7 @@ Reboot Lab
     // 3. Create the corresponding card in Nextcloud Deck.
     try {
       await createDeckCard({
+        requestId,
         name,
         email,
         topic,
